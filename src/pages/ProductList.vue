@@ -1,4 +1,6 @@
 <template>
+   <Navbar />
+    <Carousel />
      <div class="container">
       <!-- Category Filter -->
       <v-row align="center">
@@ -49,7 +51,7 @@
               <v-btn color="primary" outlined @click="addToCart(product)">
                 Add to Cart
               </v-btn>
-              <v-btn color="secondary">
+              <v-btn color="secondary" :to="{name:'ProductDisplay', params:{id:product.id}}">
                 View Details
               </v-btn>
             </v-card-actions>
@@ -65,9 +67,14 @@
         color="primary"
       ></v-pagination>
     </div>
+    <Footer />
   </template>
   
   <script>
+import Navbar from '../components/Navbar.vue';
+import Footer from '../components/Footer.vue';
+import Carousel from '../components/Carousel.vue';
+
   export default {
     data() {
       return {
@@ -77,6 +84,11 @@
         page: 1,
         itemsPerPage: 8,
       };
+    },
+    components: {
+      Navbar,
+      Footer,
+      Carousel
     },
     computed: {
       filteredProducts() {
@@ -107,7 +119,6 @@
           'All',
           ...new Set(this.products.map((product) => product.category)),
         ];
-        console.log(this.products);
       },
       discountedPrice(price, discount) {
         return (price - (price * discount) / 100).toFixed(2);
@@ -138,5 +149,9 @@
   }
   .card{
     margin-bottom: 20px;
+    transition: transform 0.2s;
+  }
+  .card:hover{
+    transform: scale(1.05);
   }
   </style>

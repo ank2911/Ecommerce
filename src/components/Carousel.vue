@@ -38,8 +38,6 @@
     slides.sort((a,b)=>b-a)
     slides=(slides.slice(0,5))
     this.carouselSlide=slides.map((itemOfSlide)=>(this.products.findIndex((item)=>item.rating===itemOfSlide)))
-    console.log(this.carouselSlide)
-    console.log()
    } 
   
   }
