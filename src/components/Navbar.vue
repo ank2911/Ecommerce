@@ -3,7 +3,7 @@
     <div class="nav">
       <v-layout>
         <v-app-bar color="primary">
-          <v-app-bar-title class="title">Ez-Shop</v-app-bar-title>
+          <v-app-bar-title class="title">EzShop</v-app-bar-title>
           <div class="icon">
             <v-btn>
               <v-icon>mdi-magnify</v-icon>

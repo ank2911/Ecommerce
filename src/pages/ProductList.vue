@@ -15,6 +15,7 @@
         outlined
       ></v-select>
     </v-col>
+    
     </v-row>
       <!-- Products Grid -->
       <v-row>
@@ -37,15 +38,15 @@
             <v-card-subtitle>{{ product.description }}</v-card-subtitle>
             <v-card-text>
               <div >
-                <p style="text-decoration: line-through">${{ product.price }}</p>
-                <span>{{ product.discountPercentage }}% off</span>
+                <span style="text-decoration: line-through; margin-right: 10px; font-size: 16px;">${{ product.price }}</span>
+                <span style="font-size: 12px;">{{ product.discountPercentage }}% off</span>
               </div>
-              <p>
+              <p style="font-size: 16px; margin-top: 8px;">
                 ${{ discountedPrice(product.price, product.discountPercentage) }}
               </p>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="primary" @click="addToCart(product)">
+              <v-btn color="primary" outlined @click="addToCart(product)">
                 Add to Cart
               </v-btn>
               <v-btn color="secondary">
@@ -127,6 +128,7 @@
   </script>
   
   <style scoped>
+
   .container {
     padding: 20px;
     margin: 30px;

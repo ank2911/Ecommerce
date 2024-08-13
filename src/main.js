@@ -15,5 +15,6 @@ const vuetify = createVuetify({
         defaultSet: 'mdi',
     },
   })
-app.use(vuetify).mount('#app')
 app.component('Footer', Footer)
+app.use(vuetify).mount('#app')
+

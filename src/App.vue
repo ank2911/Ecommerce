@@ -23,5 +23,8 @@ export default {
 </template>
 
 <style scoped>
+  template{
+  background-color: #d5bbb1;
+}
 
 </style>
