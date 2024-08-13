@@ -1,15 +1,15 @@
 <script>
-import Navbar from './components/Navbar.vue';
+import ProductList from './pages/ProductList.vue';
 export default {
   name: 'App',
   components: {
-    Navbar
+    ProductList
   }
 }
 </script>
 
 <template>
-  <Navbar />
+  <ProductList />
 </template>
 
 <style scoped>
