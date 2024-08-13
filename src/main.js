@@ -5,8 +5,9 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
+import Footer from './components/Footer.vue'
 import App from './App.vue'
-
+const app = createApp(App);
 const vuetify = createVuetify({
     components,
     directives,
@@ -14,5 +15,5 @@ const vuetify = createVuetify({
         defaultSet: 'mdi',
     },
   })
-createApp(App).use(vuetify).mount('#app')
-
+app.use(vuetify).mount('#app')
+app.component('Footer', Footer)
