@@ -8,6 +8,8 @@ import '@mdi/font/css/materialdesignicons.css'
 import Footer from './components/Footer.vue'
 import router from './router/router'
 import App from './App.vue'
+import { createPinia } from 'pinia'
+
 const app = createApp(App);
 const vuetify = createVuetify({
     components,
@@ -18,5 +20,7 @@ const vuetify = createVuetify({
   })
 app.use(router)
 app.component('Footer', Footer)
-app.use(vuetify).mount('#app')
+app.use(vuetify)
+app.use(createPinia())
+app.mount('#app')
 

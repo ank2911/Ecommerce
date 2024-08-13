@@ -2,7 +2,7 @@
   <Navbar />
   <v-container v-if="product">
     <v-btn :to="{name:'ProductList'}">
-        <v-icon>mdi-arrow-left</v-icon>
+      <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <v-card>
       <v-img
@@ -22,6 +22,11 @@
         <p><strong>Category:</strong> {{ product.category }}</p>
         <p><strong>Rating:</strong> {{ product.rating }}</p>
       </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" @click="addToCart(product)">
+          Add to Cart
+        </v-btn>
+      </v-card-actions>
     </v-card>
 
     <!-- Reviews and Comments -->
@@ -37,15 +42,15 @@
             <v-list-item-title style="margin-left: 8px;">{{ review.reviewerName }}</v-list-item-title>
             <v-list-item-subtitle style="margin-left: 8px;">{{ review.comment }}</v-list-item-subtitle>
           </v-list-item-content>
-            <v-list-item-action>
-                <v-rating
-                color="warning"
-                v-model="review.rating"
-                readonly
-                dense
-                size="30"
-                ></v-rating>
-            </v-list-item-action>
+          <v-list-item-action>
+            <v-rating
+              color="warning"
+              v-model="review.rating"
+              readonly
+              dense
+              size="30"
+            ></v-rating>
+          </v-list-item-action>
         </v-list-item>
       </v-list>
     </v-card>
@@ -56,12 +61,15 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useCartStore } from '../stores/cartStore'; // Import the cart store
 import Navbar from "../components/Navbar.vue";
 import Footer from "../components/Footer.vue";
+
 export default {
   setup() {
     const route = useRoute();
     const product = ref(null);
+    const cartStore = useCartStore(); // Access the cart store
 
     const fetchProductDetails = async () => {
       const productId = route.params.id;
@@ -76,11 +84,16 @@ export default {
       return (price - (price * discount) / 100).toFixed(2);
     };
 
+    const addToCart = (product) => {
+      cartStore.addCart(product); // Add product to cart using Pinia store
+    };
+
     onMounted(fetchProductDetails);
 
     return {
       product,
       discountedPrice,
+      addToCart, // Expose the addToCart method
     };
   },
   components: {
@@ -94,12 +107,13 @@ export default {
 .v-container {
   margin-top: 50px;
 }
-.v-btn{
-    background-color: #ced4f4;
-    font-size: 20px;
-    margin-bottom: 10px;
+.v-btn {
+  background-color: #8c94c4;
+  font-size: 15px;
+  margin-bottom: 10px;
 }
 .v-card-subtitle {
   white-space: normal;
 }
 </style>
+
