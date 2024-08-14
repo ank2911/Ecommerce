@@ -45,9 +45,8 @@ export default {
   },
   methods:{
    submit(){
-    console.log(this.search)
       this.searchItem.setSearch(this.search)
-      this.$router.push('/search')
+      this.$router.push("/search")
    }
 }};
 </script>

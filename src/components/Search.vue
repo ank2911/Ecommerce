@@ -1,5 +1,6 @@
 <template>
-    <v-container class="search-page"  v-for="items in products">
+    
+    <v-container class="search-page"  v-for="items in searchItem.Search">
     
             <v-card >
                 <v-img   :src="items.thumbnail"  height="300px"
@@ -24,33 +25,25 @@
 </v-container>
 </template>
 <script>
-    
-    import { useSearchStore } from '../stores/search';
-import { data } from './services/Api';
+import { useSearchStore } from '../stores/search';
     export default{
         name:'search',
-        data(){
+       data(){
             return{
                 searchItem:useSearchStore(),
-                products:[]
             }
-        },
-        async created(){
-         this.products=await data;
-         console.log(this.products)
-         if(this.searchItem.Search===''){
-             this.$router.push('/')
-         }
-         else{
-         this.products=this.products.filter((product)=>product.title.includes(this.searchItem.Search))
-         }
         },
         methods:{
             discountedPrice(price, discount) {
        return (price - (price * discount) / 100).toFixed(2);
      },
-        }
-    
+        },
+        watch:{
+            searchItem(old,newVal){
+                console.log(old,newVal)
+            }
+        },
+           
     }
 </script>
 <style>
