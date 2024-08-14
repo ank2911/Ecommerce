@@ -3,8 +3,19 @@
     <v-layout>
       <v-app-bar color="primary">
         <v-app-bar-title class="title">EzShop</v-app-bar-title>
-        <v-text-field class="search-area"  append-icon="mdi-magnify" variant="outlined" v-model="search" @keyup.enter="submit"></v-text-field>
-    
+        <!-- <v-text-field class="search-area" variant="outlined" v-model="search" @keyup.enter="submit" dense></v-text-field> -->
+        <div class="search-container">
+          <v-text-field
+            v-if="showSearch"
+            class="search-area"
+            variant="outlined"
+            v-model="search"
+            @keyup.enter="submit"
+          ></v-text-field>
+          <v-btn icon @click="toggleSearch">
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+        </div>
         <div class="icon">
             <v-btn :to="`/`">
               <v-icon>mdi-home</v-icon>
@@ -36,10 +47,14 @@ export default {
     return{
       cartStore: useCartStore(),
       search:'',
+      showSearch: false,
       searchItem:useSearchStore()
     }
   },
   methods:{
+    toggleSearch() {
+      this.showSearch = !this.showSearch;
+    },
    submit(){
       this.searchItem.setSearch(this.search)
       this.$router.push("/search")
@@ -63,8 +78,13 @@ export default {
 .v-icon{
   color: white;
 }
-.search-area{
+.search-container {
+  display: flex;
+  align-items: center;
+}
 
+.search-area{
+  width: 300px;
   margin-top: 20px;
   padding-right: 10px;
  }

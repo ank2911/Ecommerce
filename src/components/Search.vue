@@ -19,7 +19,6 @@
            </v-card-text>
                 <v-card-actions>
                     <v-btn @click="addProductToCart(items)">Add to Cart</v-btn>
-                    <v-btn @click="viewProductDetails(items)">View Details</v-btn>
                 </v-card-actions>
             </v-card>
 </v-container>
