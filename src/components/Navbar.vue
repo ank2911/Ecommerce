@@ -6,20 +6,15 @@
         <v-text-field class="search-area"  append-icon="mdi-magnify" variant="outlined" v-model="search" @keyup.enter="submit"></v-text-field>
     
         <div class="icon">
-          
-          <router-link to="/" class="home-link">
-            <v-btn>
+            <v-btn :to="`/`">
               <v-icon>mdi-home</v-icon>
             </v-btn>
-          </router-link>
-
-          
-
-          <router-link to="/cart">
-            <v-btn>
-              <v-icon>mdi-cart</v-icon>
-            </v-btn>
-          </router-link>
+              <v-btn :to="`/cart`">
+                <v-badge color="red" :content="cartStore.cart.length" floating>
+                <v-icon>mdi-cart</v-icon>
+              </v-badge>
+              </v-btn>
+           
 
           <v-btn>
             <v-icon>mdi-dots-vertical</v-icon>
@@ -32,13 +27,14 @@
 
 <script>
 import { useSearchStore } from '../stores/search';
-
+import { useCartStore } from '../stores/cartStore';
 
 
 export default {
   name: "Nav",
   data(){
     return{
+      cartStore: useCartStore(),
       search:'',
       searchItem:useSearchStore()
     }
@@ -47,7 +43,7 @@ export default {
    submit(){
       this.searchItem.setSearch(this.search)
       this.$router.push("/search")
-   }
+   },
 }};
 </script>
 
