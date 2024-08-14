@@ -3,16 +3,17 @@
     <v-layout>
       <v-app-bar color="primary">
         <v-app-bar-title class="title">EzShop</v-app-bar-title>
+        <v-text-field class="search-area"  append-icon="mdi-magnify" variant="outlined" v-model="search" @keyup.enter="submit"></v-text-field>
+    
         <div class="icon">
+          
           <router-link to="/" class="home-link">
             <v-btn>
               <v-icon>mdi-home</v-icon>
             </v-btn>
           </router-link>
 
-          <v-btn>
-            <v-icon>mdi-magnify</v-icon>
-          </v-btn>
+          
 
           <router-link to="/cart">
             <v-btn>
@@ -30,9 +31,25 @@
 </template>
 
 <script>
+import { useSearchStore } from '../stores/search';
+
+
+
 export default {
   name: "Nav",
-};
+  data(){
+    return{
+      search:'',
+      searchItem:useSearchStore()
+    }
+  },
+  methods:{
+   submit(){
+    console.log(this.search)
+      this.searchItem.setSearch(this.search)
+      this.$router.push('/search')
+   }
+}};
 </script>
 
 <style scoped>
@@ -51,4 +68,9 @@ export default {
 .v-icon{
   color: white;
 }
+.search-area{
+
+  margin-top: 20px;
+  padding-right: 10px;
+ }
 </style>
