@@ -21,6 +21,11 @@
         <p><strong>Category:</strong> {{ product.category }}</p>
         <p><strong>Rating:</strong> {{ product.rating }}</p>
       </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" @click="addToCart(product)">
+          Add to Cart
+        </v-btn>
+      </v-card-actions>
     </v-card>
 
     <!-- Reviews and Comments -->
@@ -58,10 +63,13 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useCartStore } from '../stores/cartStore'; // Import the cart store
+
 export default {
   setup() {
     const route = useRoute();
     const product = ref(null);
+    const cartStore = useCartStore(); // Access the cart store
 
     const fetchProductDetails = async () => {
       const productId = route.params.id;
@@ -76,11 +84,16 @@ export default {
       return (price - (price * discount) / 100).toFixed(2);
     };
 
+    const addToCart = (product) => {
+      cartStore.addCart(product); // Add product to cart using Pinia store
+    };
+
     onMounted(fetchProductDetails);
 
     return {
       product,
       discountedPrice,
+      addToCart, // Expose the addToCart method
     };
   },
 };
@@ -91,11 +104,12 @@ export default {
   margin-top: 50px;
 }
 .v-btn {
-  background-color: #ced4f4;
-  font-size: 20px;
+  background-color: #8c94c4;
+  font-size: 15px;
   margin-bottom: 10px;
 }
 .v-card-subtitle {
   white-space: normal;
 }
 </style>
+

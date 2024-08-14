@@ -13,6 +13,7 @@
         ></v-select>
       </v-col>
     </v-row>
+
     <!-- Products Grid -->
     <v-row>
       <v-col
@@ -45,8 +46,12 @@
               <span style="font-size: 12px"
                 >{{ product.discountPercentage }}% off</span
               >
+              <span>
+                ${{ product.price }}
+              </span>
+              <span style="font-size: 12px;">{{ product.discountPercentage }}% off</span>
             </div>
-            <p style="font-size: 16px; margin-top: 8px">
+            <p style="font-size: 16px; margin-top: 8px;">
               ${{ discountedPrice(product.price, product.discountPercentage) }}
             </p>
           </v-card-text>
@@ -69,21 +74,22 @@
     <v-pagination
       v-model="page"
       :length="pageCount"
-      rounded="circle"
+      rounded
       color="primary"
     ></v-pagination>
   </div>
 </template>
 
 <script>
-import Carousel from "../components/Carousel.vue";
+import Carousel from '../components/Carousel.vue';
+import { useCartStore } from '../stores/cartStore';
 
 export default {
   data() {
     return {
       products: [],
       categories: [],
-      selectedCategory: "",
+      selectedCategory: '',
       page: 1,
       itemsPerPage: 8,
     };
@@ -93,7 +99,7 @@ export default {
   },
   computed: {
     filteredProducts() {
-      if (this.selectedCategory && this.selectedCategory !== "All") {
+      if (this.selectedCategory && this.selectedCategory !== 'All') {
         return this.products.filter(
           (product) => product.category === this.selectedCategory
         );
@@ -111,13 +117,13 @@ export default {
   },
   methods: {
     async fetchProducts() {
-      const response = await fetch("https://dummyjson.com/products");
+      const response = await fetch('https://dummyjson.com/products');
       const data = await response.json();
       this.products = data.products;
       console.log(this.products);
       // Fetch categories dynamically
       this.categories = [
-        "All",
+        'All',
         ...new Set(this.products.map((product) => product.category)),
       ];
     },
@@ -125,7 +131,8 @@ export default {
       return (price - (price * discount) / 100).toFixed(2);
     },
     addToCart(product) {
-      console.log(`Added ${product.title} to cart.`);
+      const cartStore = useCartStore(); // Access the cart store
+      cartStore.addCart(product); // Call the addCart method
     },
   },
   created() {
