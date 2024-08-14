@@ -1,5 +1,4 @@
 <template>
-  <Navbar />
   <v-container v-if="product">
     <v-btn :to="{name:'ProductList'}">
       <v-icon>mdi-arrow-left</v-icon>
@@ -39,8 +38,12 @@
           :key="review.reviewerName"
         >
           <v-list-item-content>
-            <v-list-item-title style="margin-left: 8px;">{{ review.reviewerName }}</v-list-item-title>
-            <v-list-item-subtitle style="margin-left: 8px;">{{ review.comment }}</v-list-item-subtitle>
+            <v-list-item-title style="margin-left: 8px">{{
+              review.reviewerName
+            }}</v-list-item-title>
+            <v-list-item-subtitle style="margin-left: 8px">{{
+              review.comment
+            }}</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
             <v-rating
@@ -55,15 +58,12 @@
       </v-list>
     </v-card>
   </v-container>
-  <Footer />
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useCartStore } from '../stores/cartStore'; // Import the cart store
-import Navbar from "../components/Navbar.vue";
-import Footer from "../components/Footer.vue";
 
 export default {
   setup() {
@@ -95,10 +95,6 @@ export default {
       discountedPrice,
       addToCart, // Expose the addToCart method
     };
-  },
-  components: {
-    Navbar,
-    Footer,
   },
 };
 </script>

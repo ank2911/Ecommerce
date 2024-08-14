@@ -1,5 +1,4 @@
 <template>
-  <Navbar />
   <Carousel />
   <div class="container">
     <!-- Category Filter -->
