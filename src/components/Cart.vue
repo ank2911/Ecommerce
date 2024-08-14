@@ -13,7 +13,7 @@
             <v-col cols="12" md="8">
               <div class="item-details">
                 <h3>{{ item.title }}</h3>
-                <p>Price: ${{ item.price.toFixed(2) }}</p>
+                <p>Price: ${{ (item.price - (item.price * item.discountPercentage) / 100).toFixed(2) }}</p>
                 <div class="quantity-controls">
                   <v-btn icon @click="decreaseQty(item)">
                     <v-icon>mdi-minus</v-icon>
@@ -61,7 +61,7 @@ const decreaseQty = (item) => {
 
 // Computed property for total price
 const totalPrice = computed(() => {
-  return cart.value.reduce((total, item) => total + (item.price * item.qty), 0);
+  return cart.value.reduce((total, item) => total + (((item.price -(item.price * item.discountPercentage)/100)) * item.qty), 0);
 });
 </script>
 
