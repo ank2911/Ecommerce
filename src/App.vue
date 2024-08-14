@@ -5,7 +5,6 @@ export default {
   name: "App",
   components: {
     Navbar,
-    Footer,
   },
 };
 </script>

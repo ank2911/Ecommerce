@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="product">
-    <v-btn :to="{ name: 'ProductList' }">
+    <v-btn :to="`/`">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <v-card>
@@ -30,7 +30,7 @@
       <v-list>
         <v-list-item
           v-for="review in product.reviews"
-          :key="review.reviewerName"
+          :key="review.reviewerEmail"
         >
           <v-list-item-content>
             <v-list-item-title style="margin-left: 8px">{{

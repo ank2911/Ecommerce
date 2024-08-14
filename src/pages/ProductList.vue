@@ -38,7 +38,7 @@
                 style="
                   text-decoration: line-through;
                   margin-right: 10px;
-                  font-size: 16px;
+                  font-size: 16px; 
                 "
                 >${{ product.price }}</span
               >
@@ -56,7 +56,7 @@
             </v-btn>
             <v-btn
               color="secondary"
-              :to="{ name: 'ProductDisplay', params: { id: product.id } }"
+              :to="`/product/${product.id}`"
             >
               View Details
             </v-btn>
@@ -114,7 +114,7 @@ export default {
       const response = await fetch("https://dummyjson.com/products");
       const data = await response.json();
       this.products = data.products;
-
+      console.log(this.products);
       // Fetch categories dynamically
       this.categories = [
         "All",
