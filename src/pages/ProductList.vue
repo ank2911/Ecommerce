@@ -46,10 +46,6 @@
               <span style="font-size: 12px"
                 >{{ product.discountPercentage }}% off</span
               >
-              <span>
-                ${{ product.price }}
-              </span>
-              <span style="font-size: 12px;">{{ product.discountPercentage }}% off</span>
             </div>
             <p style="font-size: 16px; margin-top: 8px;">
               ${{ discountedPrice(product.price, product.discountPercentage) }}

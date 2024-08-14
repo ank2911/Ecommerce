@@ -2,8 +2,9 @@
   <div class="nav">
     <v-layout>
       <v-app-bar color="primary">
-        <v-app-bar-title class="title">EzShop</v-app-bar-title>
-        <!-- <v-text-field class="search-area" variant="outlined" v-model="search" @keyup.enter="submit" dense></v-text-field> -->
+        <v-app-bar-title class="title">
+          <v-btn :to="`/`"> EzShop</v-btn>
+      </v-app-bar-title>
         <div class="search-container">
           <v-text-field
             v-if="showSearch"
@@ -17,16 +18,14 @@
           </v-btn>
         </div>
         <div class="icon">
-            <v-btn :to="`/`">
+            <!-- <v-btn :to="`/`">
               <v-icon>mdi-home</v-icon>
-            </v-btn>
+            </v-btn> -->
               <v-btn :to="`/cart`">
                 <v-badge color="red" :content="cartStore.cart.length" floating>
                 <v-icon>mdi-cart</v-icon>
               </v-badge>
               </v-btn>
-           
-
           <v-btn>
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
