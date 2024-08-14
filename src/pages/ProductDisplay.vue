@@ -1,8 +1,7 @@
 <template>
-  <Navbar />
   <v-container v-if="product">
-    <v-btn :to="{name:'ProductList'}">
-        <v-icon>mdi-arrow-left</v-icon>
+    <v-btn :to="{ name: 'ProductList' }">
+      <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <v-card>
       <v-img
@@ -34,30 +33,31 @@
           :key="review.reviewerName"
         >
           <v-list-item-content>
-            <v-list-item-title style="margin-left: 8px;">{{ review.reviewerName }}</v-list-item-title>
-            <v-list-item-subtitle style="margin-left: 8px;">{{ review.comment }}</v-list-item-subtitle>
+            <v-list-item-title style="margin-left: 8px">{{
+              review.reviewerName
+            }}</v-list-item-title>
+            <v-list-item-subtitle style="margin-left: 8px">{{
+              review.comment
+            }}</v-list-item-subtitle>
           </v-list-item-content>
-            <v-list-item-action>
-                <v-rating
-                color="warning"
-                v-model="review.rating"
-                readonly
-                dense
-                size="30"
-                ></v-rating>
-            </v-list-item-action>
+          <v-list-item-action>
+            <v-rating
+              color="warning"
+              v-model="review.rating"
+              readonly
+              dense
+              size="30"
+            ></v-rating>
+          </v-list-item-action>
         </v-list-item>
       </v-list>
     </v-card>
   </v-container>
-  <Footer />
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import Navbar from "../components/Navbar.vue";
-import Footer from "../components/Footer.vue";
 export default {
   setup() {
     const route = useRoute();
@@ -83,10 +83,6 @@ export default {
       discountedPrice,
     };
   },
-  components: {
-    Navbar,
-    Footer,
-  },
 };
 </script>
 
@@ -94,10 +90,10 @@ export default {
 .v-container {
   margin-top: 50px;
 }
-.v-btn{
-    background-color: #ced4f4;
-    font-size: 20px;
-    margin-bottom: 10px;
+.v-btn {
+  background-color: #ced4f4;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 .v-card-subtitle {
   white-space: normal;
