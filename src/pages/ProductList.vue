@@ -39,7 +39,7 @@
                 style="
                   text-decoration: line-through;
                   margin-right: 10px;
-                  font-size: 16px; 
+                  font-size: 16px;
                 "
                 >${{ product.price }}</span
               >
@@ -47,18 +47,29 @@
                 >{{ product.discountPercentage }}% off</span
               >
             </div>
-            <p style="font-size: 16px; margin-top: 8px;">
+            <p style="font-size: 16px; margin-top: 8px">
               ${{ discountedPrice(product.price, product.discountPercentage) }}
             </p>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" outlined @click="addToCart(product)">
-              Add to Cart
-            </v-btn>
-            <v-btn
-              color="secondary"
-              :to="`/product/${product.id}`"
-            >
+            <div v-if="getProductQuantity(product) > 0">
+              <v-btn icon @click="delFromCart(product)">
+                <v-icon>mdi-minus</v-icon>
+              </v-btn>
+              <span>&nbsp;{{ getProductQuantity(product) }}</span>
+              <v-btn icon @click="addToCart(product)">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </div>
+
+            <div v-else>
+              <v-btn color="primary" outlined @click="addToCart(product)">
+                Add to Cart
+              </v-btn>
+            </div>
+          </v-card-actions>
+          <v-card-actions>
+            <v-btn color="secondary" :to="`/product/${product.id}`">
               View Details
             </v-btn>
           </v-card-actions>
@@ -77,15 +88,15 @@
 </template>
 
 <script>
-import Carousel from '../components/Carousel.vue';
-import { useCartStore } from '../stores/cartStore';
+import Carousel from "../components/Carousel.vue";
+import { useCartStore } from "../stores/cartStore";
 
 export default {
   data() {
     return {
       products: [],
       categories: [],
-      selectedCategory: '',
+      selectedCategory: "",
       page: 1,
       itemsPerPage: 8,
     };
@@ -95,7 +106,7 @@ export default {
   },
   computed: {
     filteredProducts() {
-      if (this.selectedCategory && this.selectedCategory !== 'All') {
+      if (this.selectedCategory && this.selectedCategory !== "All") {
         return this.products.filter(
           (product) => product.category === this.selectedCategory
         );
@@ -113,13 +124,13 @@ export default {
   },
   methods: {
     async fetchProducts() {
-      const response = await fetch('https://dummyjson.com/products');
+      const response = await fetch("https://dummyjson.com/products");
       const data = await response.json();
       this.products = data.products;
       console.log(this.products);
       // Fetch categories dynamically
       this.categories = [
-        'All',
+        "All",
         ...new Set(this.products.map((product) => product.category)),
       ];
     },
@@ -129,6 +140,15 @@ export default {
     addToCart(product) {
       const cartStore = useCartStore(); // Access the cart store
       cartStore.addCart(product); // Call the addCart method
+    },
+    delFromCart(product) {
+      const cartStore = useCartStore();
+      cartStore.delCart(product);
+    },
+    getProductQuantity(product) {
+      const cartStore = useCartStore();
+      const item = cartStore.cart.find((item) => item.id === product.id);
+      return item ? item.qty : 0;
     },
   },
   created() {

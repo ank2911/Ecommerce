@@ -22,9 +22,21 @@
         <p><strong>Rating:</strong> {{ product.rating }}</p>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" @click="addToCart(product)">
-          Add to Cart
-        </v-btn>
+        <div v-if="getProductQuantity(product) > 0">
+          <v-btn icon @click="delFromCart(product)">
+            <v-icon>mdi-minus</v-icon>
+          </v-btn>
+          <span>&nbsp;{{ getProductQuantity(product) }}</span>
+          <v-btn icon @click="addToCart(product)">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </div>
+
+        <div v-else>
+          <v-btn color="primary" outlined @click="addToCart(product)">
+            Add to Cart
+          </v-btn>
+        </div>
       </v-card-actions>
     </v-card>
 
@@ -88,12 +100,25 @@ export default {
       cartStore.addCart(product); // Add product to cart using Pinia store
     };
 
+    function delFromCart(product) {
+      const cartStore = useCartStore();
+      cartStore.delCart(product);
+    }
+
+    function getProductQuantity(product) {
+      const cartStore = useCartStore();
+      const item = cartStore.cart.find((item) => item.id === product.id);
+      return item ? item.qty : 0;
+    }
+
     onMounted(fetchProductDetails);
 
     return {
       product,
       discountedPrice,
       addToCart, // Expose the addToCart method
+      delFromCart,
+      getProductQuantity,
     };
   },
 };
