@@ -14,7 +14,6 @@ export const useSearchStore = defineStore({
             this.Products=this.Products.filter((product)=>{
                 return product.title.toLowerCase().includes(this.search.toLowerCase());
             });
-            console.log(this.Products);
            
         }
     },

@@ -1,63 +1,48 @@
 <template>
-    <div class="best-seller">Best seller</div>
     <v-carousel
-      height="500"
+      class="custom-carousel"
       show-arrows="hover"
-      cycle
-      delimeter-background-color="#6bb77b"
-
+       height="fit-content"
     >
       <v-carousel-item
         v-for="(item, index) in carouselSlide"
-        :key="index"
-      >
-        <v-sheet
-          height="100%" 
-        > 
-        <div class="carousel-slides">
-          <v-img :src="this.products[item].thumbnail" class="carousel-image"></v-img>
-          <v-card-title>{{ this.products[item].title }}</v-card-title>
-        </div>
-        </v-sheet>
+        :key="index">
+        <div class="custom-container">
+       <img :src="item" alt="carousel image" class="custom-image"/>
+      </div>
       </v-carousel-item>
     </v-carousel>
   </template>
   <script >
-  import {data} from "./services/Api.js"
+
   export default { 
     data () {
       return {
-      carouselSlide:[],
-      products:[]
+      carouselSlide:["https://fastly.picsum.photos/id/48/5000/3333.jpg?hmac=y3_1VDNbhii0vM_FN6wxMlvK27vFefflbUSH06z98so",
+      "https://fastly.picsum.photos/id/201/5000/3333.jpg?hmac=NE8fOMa8u9PBfkq4AVwEoJdRqoPTNwUsyKvKWuXyNCk",
+      "https://fastly.picsum.photos/id/292/3852/2556.jpg?hmac=cPYEh0I48Xpek2DPFLxTBhlZnKVhQCJsbprR-Awl9lo",
+     
+      "https://fastly.picsum.photos/id/370/4928/3264.jpg?hmac=UGe0txSnG4hhV-fAoi7e3mTnvQFhYYNcPJJbYFePh5Q",
+      "https://fastly.picsum.photos/id/30/1280/901.jpg?hmac=A_hpFyEavMBB7Dsmmp53kPXKmatwM05MUDatlWSgATE"
+      ],
+      
       }
     },
-   
-   async created(){
-     this.products = await data;
-    let slides=this.products.map((item)=>item.rating)
-    slides.sort((a,b)=>b-a)
-    slides=(slides.slice(0,5))
-    this.carouselSlide=slides.map((itemOfSlide)=>(this.products.findIndex((item)=>item.rating===itemOfSlide)))
-   } 
-  
   }
     
   
 </script>
 <style>
-.best-seller{
-  text-align: center;
-  margin-top: 45px;
-  padding-bottom: 10px;
-  font-size: 30px;
-  background-color: #6bb77b;
+
+.custom-container{
+   height: 580px;
+    
 }
-.carousel-slides{
-  height: 75%;
-  padding-top: 30px;
-  text-align: center
+.custom-image{
+  padding-top: 40px;
+    width: 100%;
+    height: inherit;
+    object-fit: cover;
 }
-.v-carousel__controls{
-  background-color: #6bb77b;
-}
+ 
 </style>

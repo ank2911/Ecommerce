@@ -37,11 +37,7 @@ import { useSearchStore } from '../stores/search';
        return (price - (price * discount) / 100).toFixed(2);
      },
         },
-        watch:{
-            searchItem(old,newVal){
-                console.log(old,newVal)
-            }
-        },
+    
            
     }
 </script>
