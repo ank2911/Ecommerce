@@ -1,7 +1,6 @@
 <template>
   <Carousel />
   <div class="container">
-    <!-- Category Filter -->
     <v-row align="center">
       <v-col class="d-flex" cols="12" sm="4">
         <v-select
@@ -14,7 +13,6 @@
       </v-col>
     </v-row>
 
-    <!-- Products Grid -->
     <v-row>
       <v-col
         v-for="product in paginatedProducts"
@@ -61,14 +59,9 @@
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </div>
-
-            <div v-else>
-              <v-btn color="primary" outlined @click="addToCart(product)">
+              <v-btn v-else color="primary" outlined @click="addToCart(product)">
                 Add to Cart
               </v-btn>
-            </div>
-          </v-card-actions>
-          <v-card-actions>
             <v-btn color="secondary" :to="`/product/${product.id}`">
               View Details
             </v-btn>
@@ -176,5 +169,8 @@ export default {
 }
 .card:hover {
   transform: scale(1.05);
+}
+.v-card-actions{
+  margin-top: -15px;
 }
 </style>

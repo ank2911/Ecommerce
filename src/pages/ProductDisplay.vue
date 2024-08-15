@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="product">
-    <v-btn :to="`/`">
+    <v-btn to="/" class="go-back-btn">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <v-card>
@@ -33,9 +33,12 @@
         </div>
 
         <div v-else>
-          <v-btn color="primary" outlined @click="addToCart(product)">
+          <v-actions>
+            <v-btn color="primary" outlined @click="addToCart(product)">
             Add to Cart
           </v-btn>
+          </v-actions>
+          
         </div>
       </v-card-actions>
     </v-card>
@@ -128,7 +131,7 @@ export default {
 .v-container {
   margin-top: 50px;
 }
-.v-btn {
+.go-back-btn {
   background-color: #8c94c4;
   font-size: 15px;
   margin-bottom: 10px;
