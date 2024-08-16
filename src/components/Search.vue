@@ -1,6 +1,10 @@
 <template>
-  <v-container class="search-page" v-for="items in searchItem.Search">
-    <v-card>
+   
+  <v-container class="search-page" >
+    <v-btn to="/" class="go-back-btn">
+      <v-icon>mdi-arrow-left</v-icon>
+    </v-btn>
+    <v-card v-for="items in searchItem.Search">
       <v-img :src="items.thumbnail" height="300px" alt="Product Image"></v-img>
       <v-card-title>{{ items.title }}</v-card-title>
       <v-card-subtitle>{{ items.description }}</v-card-subtitle>
@@ -52,11 +56,19 @@ export default {
 };
 </script>
 <style>
+.v-card{
+  margin-bottom: 20px;
+}
 .product-image {
   background-color: rgb(206, 206, 210);
 }
 .search-page {
   margin-top: 40px;
   margin-bottom: 40px;
+}
+.go-back-btn {
+  background-color: #8c94c4;
+  font-size: 15px;
+  margin-bottom: 10px;
 }
 </style>
