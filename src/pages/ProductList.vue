@@ -33,19 +33,12 @@
           <v-card-subtitle>{{ product.description }}</v-card-subtitle>
           <v-card-text>
             <div>
-              <span
-                style="
-                  text-decoration: line-through;
-                  margin-right: 10px;
-                  font-size: 16px;
-                "
-                >${{ product.price }}</span
-              >
-              <span style="font-size: 12px"
+              <span class="price">${{ product.price }}</span>
+              <span class="discount"
                 >{{ product.discountPercentage }}% off</span
               >
             </div>
-            <p style="font-size: 16px; margin-top: 8px">
+            <p class="actual-price">
               ${{ discountedPrice(product.price, product.discountPercentage) }}
             </p>
           </v-card-text>
@@ -59,9 +52,9 @@
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </div>
-              <v-btn v-else color="primary" outlined @click="addToCart(product)">
-                Add to Cart
-              </v-btn>
+            <v-btn v-else color="primary" outlined @click="addToCart(product)">
+              Add to Cart
+            </v-btn>
             <v-btn color="secondary" :to="`/product/${product.id}`">
               View Details
             </v-btn>
@@ -85,10 +78,9 @@ import Carousel from "../components/Carousel.vue";
 import { useCartStore } from "../stores/cartStore";
 
 export default {
-  
   data() {
     return {
-      cartStore : useCartStore(),
+      cartStore: useCartStore(),
       products: [],
       categories: [],
       selectedCategory: "",
@@ -161,6 +153,19 @@ export default {
   padding: 20px;
   margin: 30px;
 }
+.price {
+  text-decoration: line-through;
+  margin-right: 10px;
+  font-size: 16px;
+}
+.actual-price {
+  font-size: 16px; 
+  margin-top: 8px
+}
+.discount {
+  font-size: 12px;
+  color: rgb(218, 115, 116);
+}
 .product-image {
   background-color: rgb(206, 206, 210);
 }
@@ -171,7 +176,7 @@ export default {
 .card:hover {
   transform: scale(1.05);
 }
-.v-card-actions{
+.v-card-actions {
   margin-top: -15px;
 }
 </style>
