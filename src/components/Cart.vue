@@ -143,4 +143,5 @@ const totalPrice = computed(() => {
 .v-card-title{
   text-align: center;
 }
+
 </style>

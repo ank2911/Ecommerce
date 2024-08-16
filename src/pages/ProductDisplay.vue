@@ -1,4 +1,5 @@
 <template>
+  
   <v-container v-if="product">
     <v-btn to="/" class="go-back-btn">
       <v-icon>mdi-arrow-left</v-icon>
@@ -73,6 +74,19 @@
       </v-list>
     </v-card>
   </v-container>
+  <v-container v-else>
+    <v-row>
+      <v-col cols="12" md="6">
+        <v-skeleton-loader
+          class="mx-auto border"
+          width="900"
+          height="400"
+          type="card-avatar, actions"
+        ></v-skeleton-loader>
+      </v-col>
+    </v-row>
+  </v-container>
+  
 </template>
 
 <script>
