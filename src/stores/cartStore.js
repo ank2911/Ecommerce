@@ -6,11 +6,11 @@ export const useCartStore = defineStore('cart', () => {
   const cart = ref([]);
 
   const addCart = (product) => {
-    const exist = cart.value.find((x) => x.id === product.id);
+    const exist = cart.value.find((item) => item.id === product.id);
     if (exist) {
       // Increase the Quantity
-      cart.value = cart.value.map((x) =>
-        x.id === product.id ? { ...x, qty: x.qty + 1 } : x
+      cart.value = cart.value.map((item) =>
+        item.id === product.id ? { ...item, qty: item.qty + 1 } : item
       );
     } else {
       cart.value = [...cart.value, { ...product, qty: 1 }];
@@ -18,12 +18,12 @@ export const useCartStore = defineStore('cart', () => {
   };
 
   const delCart = (product) => {
-    const exist = cart.value.find((x) => x.id === product.id);
+    const exist = cart.value.find((item) => item.id === product.id);
     if (exist.qty === 1) {
-      cart.value = cart.value.filter((x) => x.id !== product.id);
+      cart.value = cart.value.filter((item) => item.id !== product.id);
     } else {
-      cart.value = cart.value.map((x) =>
-        x.id === product.id ? { ...x, qty: x.qty - 1 } : x
+      cart.value = cart.value.map((item) =>
+        item.id === product.id ? { ...item, qty: item.qty - 1 } : item
       );
     }
   };

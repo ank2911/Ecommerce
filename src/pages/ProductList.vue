@@ -85,8 +85,10 @@ import Carousel from "../components/Carousel.vue";
 import { useCartStore } from "../stores/cartStore";
 
 export default {
+  
   data() {
     return {
+      cartStore : useCartStore(),
       products: [],
       categories: [],
       selectedCategory: "",
@@ -139,8 +141,7 @@ export default {
       cartStore.delCart(product);
     },
     getProductQuantity(product) {
-      const cartStore = useCartStore();
-      const item = cartStore.cart.find((item) => item.id === product.id);
+      const item = this.cartStore.cart.find((item) => item.id === product.id);
       return item ? item.qty : 0;
     },
   },

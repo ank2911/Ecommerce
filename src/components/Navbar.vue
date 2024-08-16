@@ -18,11 +18,8 @@
           </v-btn>
         </div>
         <div class="icon">
-            <!-- <v-btn :to="`/`">
-              <v-icon>mdi-home</v-icon>
-            </v-btn> -->
               <v-btn :to="`/cart`">
-                <v-badge color="red" :content="cartStore.cart.length" floating>
+                <v-badge color="red" :content="totalQuantity" floating>
                 <v-icon>mdi-cart</v-icon>
               </v-badge>
               </v-btn>
@@ -58,7 +55,13 @@ export default {
       this.searchItem.setSearch(this.search)
       this.$router.push("/search")
    },
-}};
+  },
+  computed: {
+    totalQuantity() {
+      return this.cartStore.cart.reduce((sum, item) => sum + item.qty, 0);
+    }
+  }
+};
 </script>
 
 <style scoped>
