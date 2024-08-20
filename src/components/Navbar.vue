@@ -7,25 +7,35 @@
       </v-app-bar-title>
         <div class="search-container">
           <v-text-field
+           ref="searchField"
             v-if="showSearch"
             class="search-area"
             variant="outlined"
             v-model="search"
             @keyup.enter="submit"
+            
+            placeholder="Search..."
+            hide-details
+            solo
+            flat
+            
           ></v-text-field>
-          <v-btn icon @click="toggleSearch">
+          <v-btn  @click="toggleSearch">
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </div>
+        <v-btn :to="`/wishlist`">
+          <v-badge color="red" :content="totalWishlist" floating>
+            <v-icon>mdi-heart</v-icon>
+          </v-badge>
+          </v-btn>
         <div class="icon">
               <v-btn :to="`/cart`">
                 <v-badge color="red" :content="totalQuantity" floating>
                 <v-icon>mdi-cart</v-icon>
               </v-badge>
               </v-btn>
-          <v-btn>
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
+         
         </div>
       </v-app-bar>
     </v-layout>
@@ -35,6 +45,8 @@
 <script>
 import { useSearchStore } from '../stores/search';
 import { useCartStore } from '../stores/cartStore';
+import { useWishlistStore } from '../stores/wishlist';
+// import Wishlist from '../pages/Wishlist.vue';
 
 
 export default {
@@ -42,6 +54,7 @@ export default {
   data(){
     return{
       cartStore: useCartStore(),
+      wishlistStore: useWishlistStore(),
       search:'',
       showSearch: false,
       searchItem:useSearchStore()
@@ -50,15 +63,24 @@ export default {
   methods:{
     toggleSearch() {
       this.showSearch = !this.showSearch;
+      this.$nextTick(() => {
+        if (this.showSearch) {
+          this.$refs.searchField.focus();
+        }
+      });
     },
    submit(){
       this.searchItem.setSearch(this.search)
       this.$router.push("/search")
    },
+   
   },
   computed: {
     totalQuantity() {
       return this.cartStore.cart.reduce((sum, item) => sum + item.qty, 0);
+    },
+    totalWishlist() {
+      return this.wishlistStore.getWishlist.length;
     }
   }
 };
@@ -86,8 +108,16 @@ export default {
 }
 
 .search-area{
+  
   width: 300px;
   margin-top: 20px;
   padding-right: 10px;
+  padding-bottom: 20px;
+
+ 
  }
+
+
+
+
 </style>

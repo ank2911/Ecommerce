@@ -23,12 +23,18 @@
       >
         <v-card max-width="400" class="card">
           <v-img
+
             class="product-image"
             :src="product.thumbnail"
             height="150px"
             alt="Product Image"
             contain
-          ></v-img>
+            
+          ><v-icon :class="{'wishlist': true, 'wishlist-active': product.inWishlist}" @click="addToWishlist(product)">mdi-heart</v-icon></v-img>
+         
+          
+          
+          
           <v-card-title>{{ product.title }}</v-card-title>
           <v-card-subtitle>{{ product.description }}</v-card-subtitle>
           <v-card-text>
@@ -42,6 +48,7 @@
               ${{ discountedPrice(product.price, product.discountPercentage) }}
             </p>
           </v-card-text>
+          
           <v-card-actions>
             <div v-if="getProductQuantity(product) > 0">
               <v-btn icon @click="delFromCart(product)">
@@ -76,11 +83,13 @@
 <script>
 import Carousel from "../components/Carousel.vue";
 import { useCartStore } from "../stores/cartStore";
+import { useWishlistStore } from "../stores/wishlist";
 
 export default {
   data() {
     return {
       cartStore: useCartStore(),
+      wishlistStore: useWishlistStore(),
       products: [],
       categories: [],
       selectedCategory: "",
@@ -136,6 +145,20 @@ export default {
       const item = this.cartStore.cart.find((item) => item.id === product.id);
       return item ? item.qty : 0;
     },
+    addToWishlist(product) {
+      
+      this.wishlistStore.addWishlist(product);
+      
+      // console.log(wishlistStore)
+      // console.log(this.wishlistStore.getWishlist)
+
+      this.wishlistStore.getWishlist.find((item) => item.id === product.id) ? product.inWishlist = true : product.inWishlist = false;
+
+
+
+      // product.inWishlist = !product.inWishlist;
+    },
+    
   },
   created() {
     this.fetchProducts();
@@ -178,5 +201,15 @@ export default {
 }
 .v-card-actions {
   margin-top: -15px;
+}
+
+
+.wishlist-active {
+  color: red;
+}
+
+.wishlist:hover {
+  color: red;
+
 }
 </style>

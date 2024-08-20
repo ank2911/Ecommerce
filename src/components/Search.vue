@@ -36,12 +36,17 @@
 <script>
 import { useSearchStore } from "../stores/search";
 import { useCartStore } from '../stores/cartStore';
+// import { useWishlistStore } from "../stores/wishlist";
+
+
 export default {
   name: "search",
   data() {
     return {
       searchItem: useSearchStore(),
       cartStore: useCartStore(),
+      // wishlistStore: useWishlistStore(),
+      
     };
   },
   methods: {
@@ -52,6 +57,11 @@ export default {
       const item = this.cartStore.cart.find((item) => item.id === product.id);
       return item ? item.qty : 0;
     },
+    // addToWishlist(product) {
+      
+    //   this.wishlistStore.addWishlist(product);
+    //   product.inWishlist = !product.inWishlist;
+    // },
   },
 };
 </script>

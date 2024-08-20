@@ -23,6 +23,7 @@ app.use(router)
 app.component('Footer', Footer)
 app.component('Navbar', Navbar)
 app.use(vuetify)
-app.use(createPinia())
+const pinia = createPinia();
+app.use(pinia);
 app.mount('#app')
 
