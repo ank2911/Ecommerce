@@ -19,10 +19,7 @@ export const useWishlistStore = defineStore('wishlist', {
            
            
  
-            // const index = this.wishlist.findIndex((p) => p.id === product.id);
-            // if (index !== -1) {
-            //     this.wishlist.splice(index, 1);
-            // }
+            
        
            
         },

@@ -35,11 +35,13 @@
               </div>
               
 
-              <v-btn class="remove" color="primary"  @click="removeFromWishlist(item)"
+              <v-btn class="add" color="primary" outlined @click="addToCart(item)">Add to cart</v-btn>
+
+              <v-btn class="remove" color="red" @click="removeFromWishlist(item)"
                 >Remove</v-btn
               >
               
-              <v-btn class="add" color="secondary" outlined @click="addToCart(item)">Add to cart</v-btn>
+              
             
 
              
@@ -185,7 +187,7 @@ export default{
 .add{
   width: 120px;
   padding: 5px;
-  margin-left: 10px ;
+  margin-right: 10px ;
 }
 
 .empty-cart {

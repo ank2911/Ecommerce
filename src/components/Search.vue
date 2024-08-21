@@ -6,6 +6,12 @@
     </v-btn>
     <v-card v-for="items in searchItem.Search">
       <v-img :src="items.thumbnail" height="300px" alt="Product Image"></v-img>
+      <v-icon
+            class="heart"
+            :class="{ wishlist: true, 'wishlist-active': items.inWishlist}"
+            @click="addToWishlist(items)">
+            mdi-heart
+          </v-icon>
       <v-card-title>{{ items.title }}</v-card-title>
       <v-card-subtitle>{{ items.description }}</v-card-subtitle>
       <v-card-text>
@@ -36,7 +42,7 @@
 <script>
 import { useSearchStore } from "../stores/search";
 import { useCartStore } from '../stores/cartStore';
-// import { useWishlistStore } from "../stores/wishlist";
+import { useWishlistStore } from "../stores/wishlist";
 
 
 export default {
@@ -45,7 +51,7 @@ export default {
     return {
       searchItem: useSearchStore(),
       cartStore: useCartStore(),
-      // wishlistStore: useWishlistStore(),
+      wishlistStore: useWishlistStore(),
       
     };
   },
@@ -57,11 +63,12 @@ export default {
       const item = this.cartStore.cart.find((item) => item.id === product.id);
       return item ? item.qty : 0;
     },
-    // addToWishlist(product) {
+    addToWishlist(product) {
       
-    //   this.wishlistStore.addWishlist(product);
-    //   product.inWishlist = !product.inWishlist;
-    // },
+      this.wishlistStore.addWishlist(product);
+      // console.log(product);
+      product.inWishlist = !product.inWishlist;
+    },
   },
 };
 </script>
@@ -81,4 +88,20 @@ export default {
   font-size: 15px;
   margin-bottom: 10px;
 }
+
+.heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.wishlist-active {
+  color: red;
+}
+
+.wishlist:hover {
+  color: red;
+}
+
 </style>
