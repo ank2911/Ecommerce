@@ -1,24 +1,37 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
+import {defineStore} from "pinia";
+import {reactive} from "vue";
 
-export const useWishlistStore = defineStore("wishlist", {
-  state: () => ({
-    wishlist: ref([]),
-  }),
-  actions: {
-    addWishlist(product) {
-      const exists = wishlist.value.find((item) => item.id === product.id);
-      if (!exists) {
-        wishlist.value.push(product);
-      }
+export const useWishlistStore = defineStore('wishlist', {
+    state: () => ({
+        wishlist: reactive([]),
+    }),
+    actions: {
+        addWishlist(product) {
+            
+            const exists = this.wishlist.find(item => item.id === product.id);
+            if (!exists) {
+                this.wishlist.push(product);
+            }
+        },
+        removeWishlist(product) {
+
+            this.wishlist = this.wishlist.filter((p) => p.id !== product.id);
+            
+           
+
+            // const index = this.wishlist.findIndex((p) => p.id === product.id);
+            // if (index !== -1) {
+            //     this.wishlist.splice(index, 1);
+            // }
+        
+            
+        },
+       
     },
-    removeWishlist(product) {
-      wishlist.value = wishlist.value.filter((item) => item.id !== product.id);
-    },
-  },
-  getters: {
-    getWishlist(){
-        return wishlist.value;
-    }
-  },
-});
+    getters: {
+        getWishlist: (state) => 
+            state.wishlist,
+        
+    },  
+
+})
