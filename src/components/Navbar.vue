@@ -17,7 +17,7 @@
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </div>
-        <v-btn :to="`/wishlist`">
+        <v-btn to="/wishlist">
           <v-badge color="red" :content="totalWishlist" floating>
             <v-icon>mdi-heart</v-icon>
           </v-badge>
@@ -69,6 +69,7 @@ export default {
     },
     totalWishlist() {
       return this.wishlistStore.getWishlist.length;
+     
     }
   }
 };

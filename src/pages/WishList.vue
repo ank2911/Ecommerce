@@ -36,6 +36,7 @@
               <v-btn class="remove-button" @click="removeFromWishlist(item)"
                 >Remove</v-btn
               >
+              
             </v-col>
           </v-row>
         </div>
