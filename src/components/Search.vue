@@ -6,14 +6,18 @@
     </v-btn>
     <v-card v-for="items in searchItem.Search">
       <v-img :src="items.thumbnail" height="300px" alt="Product Image"></v-img>
+      <v-icon
+            class="heart"
+            :class="{ wishlist: true, 'wishlist-active': items.inWishlist}"
+            @click="addToWishlist(items)">
+            mdi-heart
+          </v-icon>
       <v-card-title>{{ items.title }}</v-card-title>
       <v-card-subtitle>{{ items.description }}</v-card-subtitle>
       <v-card-text>
-        <p><strong>Original Price:</strong> ${{ items.price }}</p>
+        <p><strong>Original Price:</strong> <v-icon class="currency-icon">{{currencyIcon}}</v-icon> {{ currencyStore.actualPrice(items.price) }}</p>
         <p>
-          <strong>Discounted Price:</strong> ${{
-            discountedPrice(items.price, items.discountPercentage)
-          }}
+          <strong>Discounted Price:</strong> <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{ currencyStore.convertPrice(items.price, items.discountPercentage) }}
         </p>
         <p><strong>Category:</strong> {{ items.category }}</p>
         <p><strong>Rating:</strong> {{ items.rating }}</p>
@@ -36,8 +40,8 @@
 <script>
 import { useSearchStore } from "../stores/search";
 import { useCartStore } from '../stores/cartStore';
-// import { useWishlistStore } from "../stores/wishlist";
-
+import { useWishlistStore } from "../stores/wishlist";
+import { useCurrencyStore } from "../stores/currencyStore";
 
 export default {
   name: "search",
@@ -45,23 +49,26 @@ export default {
     return {
       searchItem: useSearchStore(),
       cartStore: useCartStore(),
-      // wishlistStore: useWishlistStore(),
-      
+      wishlistStore: useWishlistStore(),
+      currencyStore: useCurrencyStore(),
     };
   },
   methods: {
-    discountedPrice(price, discount) {
-      return (price - (price * discount) / 100).toFixed(2);
-    },
     getProductQuantity(product) {
       const item = this.cartStore.cart.find((item) => item.id === product.id);
       return item ? item.qty : 0;
     },
-    // addToWishlist(product) {
+    addToWishlist(product) {
       
-    //   this.wishlistStore.addWishlist(product);
-    //   product.inWishlist = !product.inWishlist;
-    // },
+      this.wishlistStore.addWishlist(product);
+      // console.log(product);
+      product.inWishlist = !product.inWishlist;
+    },
+  },
+  computed: {
+    currencyIcon() {
+    return this.currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+  },
   },
 };
 </script>
@@ -80,5 +87,23 @@ export default {
   background-color: #8c94c4;
   font-size: 15px;
   margin-bottom: 10px;
+}
+
+.heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.wishlist-active {
+  color: red;
+}
+
+.wishlist:hover {
+  color: red;
+}
+.currency-icon {
+  font-size: 18px;
 }
 </style>

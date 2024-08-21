@@ -1,5 +1,4 @@
 <template>
-  
   <v-container v-if="product">
     <v-btn to="/" class="go-back-btn">
       <v-icon>mdi-arrow-left</v-icon>
@@ -13,13 +12,18 @@
       <v-card-title>{{ product.title }}</v-card-title>
       <v-card-subtitle>{{ product.description }}</v-card-subtitle>
       <v-card-text>
-        <p><strong>Original Price:</strong> ${{ product.price }}</p>
+        <p><strong>Original Price:</strong> <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{ actualPrice(product.price) }}</p>
         <p>
-          <strong>Discounted Price:</strong> ${{
-            discountedPrice(product.price, product.discountPercentage)
+          <strong>Discounted Price:</strong> <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{
+              convertedPrice(
+              product.price,
+              product.discountPercentage
+            )
           }}
         </p>
-        <p><strong>({{ product.warrantyInformation }})</strong></p>
+        <p>
+          <strong>({{ product.warrantyInformation }})</strong>
+        </p>
         <p><strong>Category:</strong> {{ product.category }}</p>
         <p><strong>Rating:</strong> {{ product.rating }}</p>
       </v-card-text>
@@ -37,10 +41,9 @@
         <div v-else>
           <v-actions>
             <v-btn color="primary" outlined @click="addToCart(product)">
-            Add to Cart
-          </v-btn>
+              Add to Cart
+            </v-btn>
           </v-actions>
-          
         </div>
       </v-card-actions>
     </v-card>
@@ -87,20 +90,20 @@
       </v-col>
     </v-row>
   </v-container>
-  
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useCartStore } from '../stores/cartStore'; // Import the cart store
-
+import { useCartStore } from "../stores/cartStore"; // Import the cart store
+import { useCurrencyStore } from "../stores/currencyStore";
+import { computed } from "vue";
 export default {
   setup() {
     const route = useRoute();
     const product = ref(null);
     const cartStore = useCartStore(); // Access the cart store
-
+    const currencyStore = useCurrencyStore();
     const fetchProductDetails = async () => {
       const productId = route.params.id;
       const response = await fetch(
@@ -128,7 +131,15 @@ export default {
       const item = cartStore.cart.find((item) => item.id === product.id);
       return item ? item.qty : 0;
     }
-
+  function convertedPrice(price, discount) {
+    return currencyStore.convertPrice(price, discount);
+  }
+  function actualPrice(price){
+    return currencyStore.actualPrice(price);
+  }
+  const currencyIcon =computed(() => {
+    return currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+  });
     onMounted(fetchProductDetails);
 
     return {
@@ -137,6 +148,9 @@ export default {
       addToCart, // Expose the addToCart method
       delFromCart,
       getProductQuantity,
+      convertedPrice,
+      actualPrice,
+      currencyIcon
     };
   },
 };
@@ -154,5 +168,7 @@ export default {
 .v-card-subtitle {
   white-space: normal;
 }
+.currency-icon {
+  font-size: 18px;
+}
 </style>
-

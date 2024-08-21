@@ -24,19 +24,30 @@
               <div class="item-details">
                 <h2>{{ item.title }}</h2>
                 <h4>
-                  Price: ${{
-                    (
-                      item.price -
-                      (item.price * item.discountPercentage) / 100
-                    ).toFixed(2)
-                  }}
+                  Price:<v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{
+              convertedPrice(
+              item.price,
+              item.discountPercentage
+            )
+          }}
                 </h4>
                 <p>{{ item.description }}</p>
               </div>
-              <v-btn class="remove" color="primary"  @click="removeFromWishlist(item)"
+
+              <v-btn
+                class="add"
+                color="primary"
+                outlined
+                @click="addToCart(item)"
+                >Add to cart</v-btn
+              >
+
+              <v-btn
+                class="remove"
+                color="red"
+                @click="removeFromWishlist(item)"
                 >Remove</v-btn
               >
-              <v-btn class="add" color="secondary" outlined @click="addToCart(item)">Add to cart</v-btn>             
             </v-col>
           </v-row>
         </div>
@@ -48,37 +59,37 @@
 <script>
 import { useWishlistStore } from "../stores/wishlist";
 import { computed } from "vue";
-import { useCartStore } from '../stores/cartStore';
-
-export default{
+import { useCartStore } from "../stores/cartStore";
+import { useCurrencyStore } from "../stores/currencyStore";
+export default {
   setup() {
-
-    const cartStore= useCartStore();
-    
-    
-    
-
+    const cartStore = useCartStore();
+    const currencyStore = useCurrencyStore();
     const wishlistStore = useWishlistStore();
     const wishlistItems = computed(() => wishlistStore.getWishlist);
-
 
     const addToCart = (item) => {
       // console.log("Adding to cart:", item);
       cartStore.addCart(item);
     };
-   
 
     const removeFromWishlist = (item) => {
       wishlistStore.removeWishlist(item);
     };
-
+    const convertedPrice = (price, discount) => {
+    return currencyStore.convertPrice(price, discount);
+  }
+  const currencyIcon =computed(() => {
+    return currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+  });
     return {
       wishlistItems,
       removeFromWishlist,
-      addToCart
+      addToCart,
+      convertedPrice,
+      currencyIcon,
     };
   },
-  
 };
 </script>
 
@@ -167,24 +178,22 @@ export default{
 }
 
 .remove {
-  
- 
   width: 80px;
-  padding:5px;
-  
-
-  
+  padding: 5px;
 }
 
-.add{
+.add {
   width: 120px;
   padding: 5px;
-  margin-left: 10px ;
+  margin-right: 10px;
 }
 
 .empty-cart {
   text-align: center;
   font-size: 18px;
   color: #666;
+}
+.currency-icon {
+  font-size: 18px;
 }
 </style>

@@ -13,7 +13,12 @@
             <v-col cols="12" md="8">
               <div class="item-details">
                 <h3>{{ item.title }}</h3>
-                <p>Price: ${{ (item.price - (item.price * item.discountPercentage) / 100).toFixed(2) }}</p>
+                <p>Price: <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{
+              convertedPrice(
+              item.price,
+              item.discountPercentage
+            )
+          }}</p>
                 <div class="quantity-controls">
                   <v-btn icon @click="decreaseQty(item)">
                     <v-icon>mdi-minus</v-icon>
@@ -34,7 +39,7 @@
       <v-card-actions class="footer">
         <v-spacer></v-spacer>
         <v-btn color="primary" @click="checkout">Checkout</v-btn>
-        <span class="total-price">Total: ${{ totalPrice.toFixed(2) }}</span>
+        <span class="total-price">Total:<v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{ totalPrice.toFixed(2) }}</span>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -42,11 +47,12 @@
 
 <script setup>
 import { useCartStore } from '../stores/cartStore';
+import { useCurrencyStore } from '../stores/currencyStore';
 import { computed } from 'vue';
 
 // Use the cart store
 const cartStore = useCartStore();
-
+const currencyStore = useCurrencyStore();
 // Computed property for cart items
 const cart = computed(() => cartStore.cart);
 
@@ -58,10 +64,18 @@ const increaseQty = (item) => {
 const decreaseQty = (item) => {
   cartStore.delCart(item);
 };
-
+const convertedPrice = (price, discount) => {
+    return currencyStore.convertPrice(price, discount);
+  }
+  const currencyIcon =computed(() => {
+    return currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+  });
 // Computed property for total price
 const totalPrice = computed(() => {
-  return cart.value.reduce((total, item) => total + (((item.price -(item.price * item.discountPercentage)/100)) * item.qty), 0);
+  return cart.value.reduce((total, item) => {
+    const itemPrice = currencyStore.convertPrice(item.price, item.discountPercentage);
+    return total + itemPrice * item.qty;
+  }, 0);
 });
 </script>
 
@@ -143,5 +157,7 @@ const totalPrice = computed(() => {
 .v-card-title{
   text-align: center;
 }
-
+.currency-icon {
+  font-size: 18px;
+}
 </style>

@@ -5,21 +5,14 @@
         <v-app-bar-title class="title">
           <v-btn :to="`/`"> EzShop</v-btn>
       </v-app-bar-title>
-        <div class="search-container">
-          <v-text-field
-           ref="searchField"
+      <div class="search-container">
+          <input
             v-if="showSearch"
             class="search-area"
-            variant="outlined"
             v-model="search"
             @keyup.enter="submit"
-            
             placeholder="Search..."
-            hide-details
-            solo
-            flat
-            
-          ></v-text-field>
+          >
           <v-btn  @click="toggleSearch">
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
@@ -35,8 +28,10 @@
                 <v-icon>mdi-cart</v-icon>
               </v-badge>
               </v-btn>
-         
         </div>
+        <v-btn icon @click="toggleCurrency">
+          <v-icon>{{ currencyIcon }}</v-icon>
+        </v-btn>
       </v-app-bar>
     </v-layout>
   </div>
@@ -46,7 +41,7 @@
 import { useSearchStore } from '../stores/search';
 import { useCartStore } from '../stores/cartStore';
 import { useWishlistStore } from '../stores/wishlist';
-// import Wishlist from '../pages/Wishlist.vue';
+import { useCurrencyStore } from '../stores/currencyStore';
 
 
 export default {
@@ -55,25 +50,24 @@ export default {
     return{
       cartStore: useCartStore(),
       wishlistStore: useWishlistStore(),
+      currencyStore: useCurrencyStore(),
       search:'',
       showSearch: false,
-      searchItem:useSearchStore()
+      searchItem:useSearchStore(),
+      
     }
   },
   methods:{
     toggleSearch() {
       this.showSearch = !this.showSearch;
-      this.$nextTick(() => {
-        if (this.showSearch) {
-          this.$refs.searchField.focus();
-        }
-      });
     },
    submit(){
       this.searchItem.setSearch(this.search)
       this.$router.push("/search")
    },
-   
+   toggleCurrency() {
+      this.currencyStore.toggleCurrency();
+    }
   },
   computed: {
     totalQuantity() {
@@ -81,8 +75,12 @@ export default {
     },
     totalWishlist() {
       return this.wishlistStore.getWishlist.length;
-    }
-  }
+    },
+    currencyIcon() {
+    return this.currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+  },
+  },
+  
 };
 </script>
 
@@ -108,13 +106,17 @@ export default {
 }
 
 .search-area{
-  
   width: 300px;
-  margin-top: 20px;
-  padding-right: 10px;
-  padding-bottom: 20px;
-
- 
+ border: 1px solid #ccc;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 20px;
+  outline: none;
+  color: white;  
+ }
+ ::placeholder{
+    color: white;
  }
 
 

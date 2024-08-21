@@ -40,13 +40,13 @@
           <v-card-subtitle>{{ product.description }}</v-card-subtitle>
           <v-card-text>
             <div>
-              <span class="price">${{ product.price }}</span>
+              <span class="price"><v-icon class="currency-icon">{{currencyIcon}}</v-icon> {{ currencyStore.actualPrice(product.price) }}</span>
               <span class="discount"
                 >{{ product.discountPercentage }}% off</span
               >
             </div>
             <p class="actual-price">
-              ${{ discountedPrice(product.price, product.discountPercentage) }}
+              <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{ currencyStore.convertPrice(product.price, product.discountPercentage) }}
             </p>
           </v-card-text>
 
@@ -85,12 +85,13 @@
 import Carousel from "../components/Carousel.vue";
 import { useCartStore } from "../stores/cartStore";
 import { useWishlistStore } from "../stores/wishlist";
-
+import { useCurrencyStore } from "../stores/currencyStore";
 export default {
   data() {
     return {
       cartStore: useCartStore(),
       wishlistStore: useWishlistStore(),
+      currencyStore: useCurrencyStore(),
       products: [],
       categories: [],
       selectedCategory: "",
@@ -118,6 +119,9 @@ export default {
     pageCount() {
       return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
     },
+    currencyIcon() {
+    return this.currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+  },
   },
   methods: {
     async fetchProducts() {
@@ -130,9 +134,6 @@ export default {
         "All",
         ...new Set(this.products.map((product) => product.category)),
       ];
-    },
-    discountedPrice(price, discount) {
-      return (price - (price * discount) / 100).toFixed(2);
     },
     addToCart(product) {
       const cartStore = useCartStore(); // Access the cart store
@@ -215,5 +216,8 @@ export default {
   top: 10px;
   right: 10px;
   cursor: pointer;
+}
+.currency-icon {
+  font-size: 18px;
 }
 </style>

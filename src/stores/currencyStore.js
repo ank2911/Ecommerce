@@ -2,19 +2,23 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useCurrencyStore = defineStore('currency', () => {
-  const selectedCurrency = ref('USD');
-  const conversionRate = ref({
-    USD: 1,
-    INR: 74.85,
-    GBP: 0.75,
-  });
-
-  const setCurrency = (currency) => {
-    selectedCurrency.value = currency;
+  const currency = ref('USD');
+ 
+  const toggleCurrency = () => {
+    return currency.value = currency.value === 'USD' ? 'INR' : 'USD';
   }
-  const convertPrice = (price) => {
-    return (price * conversionRate.value[selectedCurrency.value]).toFixed(2);
-
+  const actualPrice = (price) => {
+    if(currency.value === 'INR'){
+      return (price*83.92).toFixed(2);
+    }
+    return price;
   }
-  return { setCurrency, convertPrice, conversionRate, selectedCurrency };
+  const convertPrice = (price,discount) => {
+   let finalPrice = price-(price*discount/100);
+    if(currency.value === 'INR'){
+      finalPrice = (finalPrice*83.92);
+    }
+    return finalPrice.toFixed(2);
+  }
+  return {  currency,convertPrice, toggleCurrency,actualPrice };
 });
