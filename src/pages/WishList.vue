@@ -1,57 +1,54 @@
-
-
-
-
-
-
-  <template>
-    <v-container>
-        
-        <v-btn to="/" class="go-back-btn">
+<template>
+  <v-container>
+    <v-btn to="/" class="go-back-btn">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    
-      <v-card class="mx-auto my-5" max-width="800" outlined>
-        <v-card-title>
-          <h2 class="headline">Wishlist</h2>
-        </v-card-title>
-        <v-card-text>
-            <div v-if="wishlistItems.length === 0" class="empty-wishlist">
-         Your wishlist is empty.
+    <v-card>
+      <v-card-title>
+        <h2 class="headline">Wishlist</h2>
+      </v-card-title>
+      <v-card-text>
+        <div v-if="wishlistItems.length === 0" class="empty-wishlist">
+          Your wishlist is empty.
         </div>
         <div v-else>
-            <v-row v-for="item in wishlistItems" :key="item.id" class="cart-item">
-              <v-col cols="12" md="4">
-                <v-img :src="item.thumbnail" alt="Product Image" class="item-image" />
-              </v-col>
-              <v-col cols="12" md="8">
-                <div class="item-details">
-                  <h2>{{ item.title }}</h2>
-                  <h4>Price: ${{ (item.price - (item.price * item.discountPercentage) / 100).toFixed(2) }}</h4>
-                  <p>{{ item.description }}</p>
-                </div>
-                <v-btn class="remove-button" @click="removeFromWishlist(item)">Remove</v-btn>
-              </v-col>
-            </v-row>
+          <v-row v-for="item in wishlistItems" :key="item.id" class="cart-item">
+            <v-col cols="12" md="4">
+              <v-img
+                :src="item.thumbnail"
+                alt="Product Image"
+                class="item-image"
+              />
+            </v-col>
+            <v-col cols="12" md="8">
+              <div class="item-details">
+                <h2>{{ item.title }}</h2>
+                <h4>
+                  Price: ${{
+                    (
+                      item.price -
+                      (item.price * item.discountPercentage) / 100
+                    ).toFixed(2)
+                  }}
+                </h4>
+                <p>{{ item.description }}</p>
+              </div>
+              <v-btn class="remove-button" @click="removeFromWishlist(item)"
+                >Remove</v-btn
+              >
+            </v-col>
+          </v-row>
         </div>
-        
-            
-          
-         </v-card-text>
-       
-      </v-card>
-     
-    </v-container>
-  </template>
+      </v-card-text>
+    </v-card>
+  </v-container>
+</template>
 
+<script>
+import { useWishlistStore } from "../stores/wishlist";
+import { defineComponent, computed } from "vue";
 
-
-  
-  <script>
-  import { useWishlistStore } from "../stores/wishlist";
-  import { defineComponent, computed } from 'vue';
-  
-  export default defineComponent({
+export default{
   setup() {
     const wishlistStore = useWishlistStore();
     const wishlistItems = computed(() => wishlistStore.getWishlist);
@@ -65,8 +62,8 @@
       removeFromWishlist,
     };
   },
-});
-  </script>
+};
+</script>
 
 <style scoped>
 .cart-item {
@@ -116,7 +113,7 @@
   background-color: #0056b3;
 }
 
-.empty-wishlist{
+.empty-wishlist {
   text-align: center;
   font-size: 18px;
   color: #666;
@@ -127,7 +124,6 @@
   padding: 15px;
   text-align: right;
 }
-
 
 .total-price {
   margin-left: 50px;
@@ -143,7 +139,7 @@
   margin-top: 50px;
   min-height: 77.3vh;
 }
-.v-card-title{
+.v-card-title {
   text-align: center;
 }
 
@@ -154,7 +150,7 @@
 }
 
 .remove-button {
-    color: red;
+  color: red;
 }
 
 .empty-cart {
@@ -162,6 +158,4 @@
   font-size: 18px;
   color: #666;
 }
-
-
 </style>

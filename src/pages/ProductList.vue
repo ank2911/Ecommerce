@@ -23,18 +23,19 @@
       >
         <v-card max-width="400" class="card">
           <v-img
-
             class="product-image"
             :src="product.thumbnail"
             height="150px"
             alt="Product Image"
             contain
-            
-          ><v-icon :class="{'wishlist': true, 'wishlist-active': product.inWishlist}" @click="addToWishlist(product)">mdi-heart</v-icon></v-img>
-         
-          
-          
-          
+          ></v-img>
+          <v-icon
+            class="heart"
+            :class="{ wishlist: true, 'wishlist-active': product.inWishlist}"
+            @click="addToWishlist(product)">
+            mdi-heart
+          </v-icon>
+
           <v-card-title>{{ product.title }}</v-card-title>
           <v-card-subtitle>{{ product.description }}</v-card-subtitle>
           <v-card-text>
@@ -48,7 +49,7 @@
               ${{ discountedPrice(product.price, product.discountPercentage) }}
             </p>
           </v-card-text>
-          
+
           <v-card-actions>
             <div v-if="getProductQuantity(product) > 0">
               <v-btn icon @click="delFromCart(product)">
@@ -146,19 +147,17 @@ export default {
       return item ? item.qty : 0;
     },
     addToWishlist(product) {
-      
       this.wishlistStore.addWishlist(product);
-      
+
       // console.log(wishlistStore)
       // console.log(this.wishlistStore.getWishlist)
 
-      this.wishlistStore.getWishlist.find((item) => item.id === product.id) ? product.inWishlist = true : product.inWishlist = false;
-
-
+      this.wishlistStore.getWishlist.find((item) => item.id === product.id)
+        ? (product.inWishlist = true)
+        : (product.inWishlist = false);
 
       // product.inWishlist = !product.inWishlist;
     },
-    
   },
   created() {
     this.fetchProducts();
@@ -182,14 +181,15 @@ export default {
   font-size: 16px;
 }
 .actual-price {
-  font-size: 16px; 
-  margin-top: 8px
+  font-size: 16px;
+  margin-top: 8px;
 }
 .discount {
   font-size: 12px;
   color: rgb(218, 115, 116);
 }
 .product-image {
+  position: relative;
   background-color: rgb(206, 206, 210);
 }
 .card {
@@ -203,13 +203,17 @@ export default {
   margin-top: -15px;
 }
 
-
 .wishlist-active {
   color: red;
 }
 
 .wishlist:hover {
   color: red;
-
+}
+.heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 </style>
