@@ -11,12 +11,11 @@ const routes = [
     {path:'/cart', name:'Cart', component:Cart},
     {path:"/search", component: Search},
     {path:"/wishlist", name: 'Wishlist', component: Wishlist}
-
-];
-
-const router = createRouter({   
+ ];
+ 
+const router = createRouter({  
     history: createWebHistory(),
     routes
 });
-
+ 
 export default router;

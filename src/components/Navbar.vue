@@ -6,18 +6,25 @@
           <v-btn :to="`/`"> EzShop</v-btn>
       </v-app-bar-title>
         <div class="search-container">
-          <input
+          <v-text-field
+           ref="searchField"
             v-if="showSearch"
             class="search-area"
+            variant="outlined"
             v-model="search"
             @keyup.enter="submit"
+            
             placeholder="Search..."
-          >
+            hide-details
+            solo
+            flat
+            
+          ></v-text-field>
           <v-btn  @click="toggleSearch">
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </div>
-        <v-btn to="/wishlist">
+        <v-btn :to="`/wishlist`">
           <v-badge color="red" :content="totalWishlist" floating>
             <v-icon>mdi-heart</v-icon>
           </v-badge>
@@ -56,6 +63,11 @@ export default {
   methods:{
     toggleSearch() {
       this.showSearch = !this.showSearch;
+      this.$nextTick(() => {
+        if (this.showSearch) {
+          this.$refs.searchField.focus();
+        }
+      });
     },
    submit(){
       this.searchItem.setSearch(this.search)
@@ -69,7 +81,6 @@ export default {
     },
     totalWishlist() {
       return this.wishlistStore.getWishlist.length;
-     
     }
   }
 };
@@ -97,18 +108,15 @@ export default {
 }
 
 .search-area{
+  
   width: 300px;
- border: 1px solid #ccc;
-  padding-left: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 20px;
-  outline: none;
-  color: white;  
+  margin-top: 20px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+
+ 
  }
- ::placeholder{
-    color: white;
- }
+
 
 
 

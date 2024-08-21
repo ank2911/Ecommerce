@@ -19,6 +19,7 @@
             discountedPrice(product.price, product.discountPercentage)
           }}
         </p>
+        <p><strong>({{ product.warrantyInformation }})</strong></p>
         <p><strong>Category:</strong> {{ product.category }}</p>
         <p><strong>Rating:</strong> {{ product.rating }}</p>
       </v-card-text>
