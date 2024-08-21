@@ -33,9 +33,16 @@
                 </h4>
                 <p>{{ item.description }}</p>
               </div>
-              <v-btn class="remove-button" @click="removeFromWishlist(item)"
+              
+
+              <v-btn class="remove" color="primary"  @click="removeFromWishlist(item)"
                 >Remove</v-btn
               >
+              
+              <v-btn class="add" color="secondary" outlined @click="addToCart(item)">Add to cart</v-btn>
+            
+
+             
             </v-col>
           </v-row>
         </div>
@@ -46,12 +53,26 @@
 
 <script>
 import { useWishlistStore } from "../stores/wishlist";
-import { defineComponent, computed } from "vue";
+import { computed } from "vue";
+import { useCartStore } from '../stores/cartStore';
 
 export default{
   setup() {
+
+    const cartStore= useCartStore();
+    
+    
+    
+
     const wishlistStore = useWishlistStore();
     const wishlistItems = computed(() => wishlistStore.getWishlist);
+
+
+    const addToCart = (item) => {
+      // console.log("Adding to cart:", item);
+      cartStore.addCart(item);
+    };
+   
 
     const removeFromWishlist = (item) => {
       wishlistStore.removeWishlist(item);
@@ -60,8 +81,10 @@ export default{
     return {
       wishlistItems,
       removeFromWishlist,
+      addToCart
     };
   },
+  
 };
 </script>
 
@@ -149,8 +172,20 @@ export default{
   margin-bottom: 10px;
 }
 
-.remove-button {
-  color: red;
+.remove {
+  
+ 
+  width: 80px;
+  padding:5px;
+  
+
+  
+}
+
+.add{
+  width: 120px;
+  padding: 5px;
+  margin-left: 10px ;
 }
 
 .empty-cart {
