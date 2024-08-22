@@ -12,9 +12,9 @@
       <v-card-title>{{ product.title }}</v-card-title>
       <v-card-subtitle>{{ product.description }}</v-card-subtitle>
       <v-card-text>
-        <p><strong>Original Price:</strong> <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{ actualPrice(product.price) }}</p>
+        <p><strong>Original Price:</strong> {{currencyIcon}}{{ actualPrice(product.price) }}</p>
         <p>
-          <strong>Discounted Price:</strong> <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{
+          <strong>Discounted Price:</strong> {{currencyIcon}} {{
               convertedPrice(
               product.price,
               product.discountPercentage
@@ -138,7 +138,7 @@ export default {
     return currencyStore.actualPrice(price);
   }
   const currencyIcon =computed(() => {
-    return currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+    return currencyStore.currency === 'USD' ? '$' : '₹';
   });
     onMounted(fetchProductDetails);
 

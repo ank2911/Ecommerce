@@ -13,7 +13,7 @@
             <v-col cols="12" md="8">
               <div class="item-details">
                 <h3>{{ item.title }}</h3>
-                <p>Price: <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{
+                <p>Price: {{currencyIcon}}{{
               convertedPrice(
               item.price,
               item.discountPercentage
@@ -39,7 +39,7 @@
       <v-card-actions class="footer">
         <v-spacer></v-spacer>
         <v-btn color="primary" @click="checkout">Checkout</v-btn>
-        <span class="total-price">Total:<v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{ totalPrice.toFixed(2) }}</span>
+        <span class="total-price">Total:{{currencyIcon}}{{ totalPrice.toFixed(2) }}</span>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -68,7 +68,7 @@ const convertedPrice = (price, discount) => {
     return currencyStore.convertPrice(price, discount);
   }
   const currencyIcon =computed(() => {
-    return currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+    return currencyStore.currency === 'USD' ? '$' : '₹';
   });
 // Computed property for total price
 const totalPrice = computed(() => {

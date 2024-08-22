@@ -15,9 +15,9 @@
       <v-card-title>{{ items.title }}</v-card-title>
       <v-card-subtitle>{{ items.description }}</v-card-subtitle>
       <v-card-text>
-        <p><strong>Original Price:</strong> <v-icon class="currency-icon">{{currencyIcon}}</v-icon> {{ currencyStore.actualPrice(items.price) }}</p>
+        <p><strong>Original Price:</strong> {{currencyIcon}} {{ currencyStore.actualPrice(items.price) }}</p>
         <p>
-          <strong>Discounted Price:</strong> <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{ currencyStore.convertPrice(items.price, items.discountPercentage) }}
+          <strong>Discounted Price:</strong> {{currencyIcon}} {{ currencyStore.convertPrice(items.price, items.discountPercentage) }}
         </p>
         <p><strong>Category:</strong> {{ items.category }}</p>
         <p><strong>Rating:</strong> {{ items.rating }}</p>
@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     currencyIcon() {
-    return this.currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+    return this.currencyStore.currency === 'USD' ? '$' : '₹';
   },
   },
 };

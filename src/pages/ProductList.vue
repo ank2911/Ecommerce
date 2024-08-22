@@ -40,13 +40,13 @@
           <v-card-subtitle>{{ product.description }}</v-card-subtitle>
           <v-card-text>
             <div>
-              <span class="price"><v-icon class="currency-icon">{{currencyIcon}}</v-icon> {{ currencyStore.actualPrice(product.price) }}</span>
+              <span class="price">{{currencyIcon}} {{ currencyStore.actualPrice(product.price) }}</span>
               <span class="discount"
                 >{{ product.discountPercentage }}% off</span
               >
             </div>
             <p class="actual-price">
-              <v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{ currencyStore.convertPrice(product.price, product.discountPercentage) }}
+              {{currencyIcon}} {{ currencyStore.convertPrice(product.price, product.discountPercentage) }}
             </p>
           </v-card-text>
 
@@ -120,7 +120,7 @@ export default {
       return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
     },
     currencyIcon() {
-    return this.currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+    return this.currencyStore.currency === 'USD' ? '$' : '₹';
   },
   },
   methods: {

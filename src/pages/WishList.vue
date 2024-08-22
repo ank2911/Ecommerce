@@ -24,7 +24,7 @@
               <div class="item-details">
                 <h2>{{ item.title }}</h2>
                 <h4>
-                  Price:<v-icon class="currency-icon">{{currencyIcon}}</v-icon>{{
+                  Price:{{currencyIcon}}{{
               convertedPrice(
               item.price,
               item.discountPercentage
@@ -80,7 +80,7 @@ export default {
     return currencyStore.convertPrice(price, discount);
   }
   const currencyIcon =computed(() => {
-    return currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+    return currencyStore.currency === 'USD' ? '$' : '₹';
   });
     return {
       wishlistItems,
