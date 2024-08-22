@@ -12,6 +12,7 @@
             v-model="search"
             @keyup.enter="submit"
             placeholder="Search..."
+            autofocus
           >
           <v-btn  @click="toggleSearch">
             <v-icon>mdi-magnify</v-icon>
@@ -117,8 +118,11 @@ export default {
  }
  ::placeholder{
     color: white;
+  
  }
-
+input:focus{
+  border: 2px solid white;
+}
 
 
 
