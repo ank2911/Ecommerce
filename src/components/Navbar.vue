@@ -3,8 +3,18 @@
     <v-layout>
       <v-app-bar color="primary">
         <v-app-bar-title class="title">
-          <v-btn :to="`/`"> EzShop</v-btn>
+            <router-link to="/">
+              <v-btn color="white">
+                <img src="/public/image/logo.png" alt="Logo" style="max-height: 80px; max-width:80px;">
+              </v-btn>
+            </router-link>
+            <router-link to="/about">
+          <v-btn color="white">
+            About
+          </v-btn>
+          </router-link>
       </v-app-bar-title>
+      
       <div class="search-container">
           <input
             v-if="showSearch"
