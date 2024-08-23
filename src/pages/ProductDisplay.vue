@@ -113,12 +113,8 @@ export default {
       product.value = data;
     };
 
-    const discountedPrice = (price, discount) => {
-      return (price - (price * discount) / 100).toFixed(2);
-    };
-
     const addToCart = (product) => {
-      cartStore.addCart(product); // Add product to cart using Pinia store
+      cartStore.addCart(product); 
     };
 
     function delFromCart(product) {
@@ -127,7 +123,6 @@ export default {
     }
 
     function getProductQuantity(product) {
-      const cartStore = useCartStore();
       const item = cartStore.cart.find((item) => item.id === product.id);
       return item ? item.qty : 0;
     }
@@ -144,13 +139,13 @@ export default {
 
     return {
       product,
-      discountedPrice,
-      addToCart, // Expose the addToCart method
+      addToCart, 
       delFromCart,
       getProductQuantity,
       convertedPrice,
       actualPrice,
-      currencyIcon
+      currencyIcon,
+      cartStore,
     };
   },
 };

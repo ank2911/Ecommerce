@@ -118,7 +118,7 @@ const totalPrice = computed(() => {
   color: white;
   border: none;
   padding: 5px 10px;
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
   border-radius: 3px;
 }
@@ -147,8 +147,8 @@ const totalPrice = computed(() => {
 }
 
 .v-btn {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
 }
 .v-container {
   margin-top: 50px;
@@ -156,8 +156,5 @@ const totalPrice = computed(() => {
 }
 .v-card-title{
   text-align: center;
-}
-.currency-icon {
-  font-size: 18px;
 }
 </style>

@@ -3,19 +3,21 @@
     <v-layout>
       <v-app-bar color="primary">
         <v-app-bar-title class="title">
-            <router-link to="/">
-              <v-btn color="white">
-                <img src="/public/image/logo.png" alt="Logo" style="max-height: 80px; max-width:80px;">
-              </v-btn>
-            </router-link>
-            <router-link to="/about">
-          <v-btn color="white">
-            About
-          </v-btn>
+          <router-link to="/">
+            <v-btn color="white">
+              <img
+                src="/public/image/logo.png"
+                alt="Logo"
+                style="max-height: 80px; max-width: 80px"
+              />
+            </v-btn>
           </router-link>
-      </v-app-bar-title>
-      
-      <div class="search-container">
+          <router-link to="/about">
+            <v-btn color="white"> About </v-btn>
+          </router-link>
+        </v-app-bar-title>
+
+        <div class="search-container">
           <input
             v-if="showSearch"
             class="search-area"
@@ -23,22 +25,22 @@
             @keyup.enter="submit"
             placeholder="Search..."
             autofocus
-          >
-          <v-btn  @click="toggleSearch">
+          />
+          <v-btn @click="toggleSearch">
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
         </div>
-        <v-btn :to="`/wishlist`">
+        <v-btn to="/wishlist">
           <v-badge color="red" :content="totalWishlist" floating>
             <v-icon>mdi-heart</v-icon>
           </v-badge>
-          </v-btn>
+        </v-btn>
         <div class="icon">
-              <v-btn :to="`/cart`">
-                <v-badge color="red" :content="totalQuantity" floating>
-                <v-icon>mdi-cart</v-icon>
-              </v-badge>
-              </v-btn>
+          <v-btn to="/cart">
+            <v-badge color="red" :content="totalQuantity" floating>
+              <v-icon>mdi-cart</v-icon>
+            </v-badge>
+          </v-btn>
         </div>
         <v-btn icon @click="toggleCurrency">
           <v-icon>{{ currencyIcon }}</v-icon>
@@ -49,36 +51,34 @@
 </template>
 
 <script>
-import { useSearchStore } from '../stores/search';
-import { useCartStore } from '../stores/cartStore';
-import { useWishlistStore } from '../stores/wishlist';
-import { useCurrencyStore } from '../stores/currencyStore';
-
+import { useSearchStore } from "../stores/search";
+import { useCartStore } from "../stores/cartStore";
+import { useWishlistStore } from "../stores/wishlist";
+import { useCurrencyStore } from "../stores/currencyStore";
 
 export default {
   name: "Nav",
-  data(){
-    return{
+  data() {
+    return {
       cartStore: useCartStore(),
       wishlistStore: useWishlistStore(),
       currencyStore: useCurrencyStore(),
-      search:'',
+      searchItem: useSearchStore(),
+      search: "",
       showSearch: false,
-      searchItem:useSearchStore(),
-      
-    }
+    };
   },
-  methods:{
+  methods: {
     toggleSearch() {
       this.showSearch = !this.showSearch;
     },
-   submit(){
-      this.searchItem.setSearch(this.search)
-      this.$router.push("/search")
-   },
-   toggleCurrency() {
+    submit() {
+      this.searchItem.setSearch(this.search);
+      this.$router.push("/search");
+    },
+    toggleCurrency() {
       this.currencyStore.toggleCurrency();
-    }
+    },
   },
   computed: {
     totalQuantity() {
@@ -88,10 +88,11 @@ export default {
       return this.wishlistStore.getWishlist.length;
     },
     currencyIcon() {
-    return this.currencyStore.currency === 'USD' ? 'mdi-currency-usd' : 'mdi-currency-inr';
+      return this.currencyStore.currency === "USD"
+        ? "mdi-currency-usd"
+        : "mdi-currency-inr";
+    },
   },
-  },
-  
 };
 </script>
 
@@ -108,7 +109,7 @@ export default {
   margin-right: 15px; /* Adjust spacing as needed */
 }
 
-.v-icon{
+.v-icon {
   color: white;
 }
 .search-container {
@@ -116,24 +117,20 @@ export default {
   align-items: center;
 }
 
-.search-area{
+.search-area {
   width: 300px;
- border: 1px solid #ccc;
+  border: 1px solid #ccc;
   padding-left: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
   border-radius: 20px;
   outline: none;
-  color: white;  
- }
- ::placeholder{
-    color: white;
-  
- }
-input:focus{
+  color: white;
+}
+::placeholder {
+  color: white;
+}
+input:focus {
   border: 2px solid white;
 }
-
-
-
 </style>

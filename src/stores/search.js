@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import {data} from "../components/services/Api.js";
+import {data} from "../services/Api.js";
 export const useSearchStore = defineStore({
     id: "search",
     state:()=>({
