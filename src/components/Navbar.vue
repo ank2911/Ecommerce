@@ -6,7 +6,7 @@
           <router-link to="/">
             <v-btn color="white">
               <img
-                src="/public/image/logo.png"
+                src="/image/logo.png"
                 alt="Logo"
                 style="max-height: 80px; max-width: 80px"
               />

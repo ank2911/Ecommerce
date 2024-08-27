@@ -38,7 +38,7 @@
       </v-card-text>
       <v-card-actions class="footer">
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="checkout">Checkout</v-btn>
+        <v-btn color="primary">Checkout</v-btn>
         <span class="total-price">Total:{{currencyIcon}}{{ totalPrice.toFixed(2) }}</span>
       </v-card-actions>
     </v-card>

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import {data} from "../services/Api.js";
+import { fetchProducts } from "../services/Api";
 export const useSearchStore = defineStore({
     id: "search",
     state:()=>({
@@ -9,7 +9,7 @@ export const useSearchStore = defineStore({
     actions:{
         async setSearch(search){
             this.search=search;
-            const response=(await data)
+            const response=(await fetchProducts());
             this.Products=response;
             this.Products=this.Products.filter((product)=>{
                 return product.title.toLowerCase().includes(this.search.toLowerCase());

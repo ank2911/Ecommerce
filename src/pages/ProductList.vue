@@ -83,6 +83,7 @@
 
 <script>
 import Carousel from "../components/Carousel.vue";
+import { fetchProducts } from "../services/Api";
 import { useCartStore } from "../stores/cartStore";
 import { useWishlistStore } from "../stores/wishlist";
 import { useCurrencyStore } from "../stores/currencyStore";
@@ -125,9 +126,8 @@ export default {
   },
   methods: {
     async fetchProducts() {
-      const response = await fetch("https://dummyjson.com/products");
-      const data = await response.json();
-      this.products = data.products;
+      const response=(await fetchProducts());
+      this.products = response;
       console.log(this.products);
       // Fetch categories dynamically
       this.categories = [

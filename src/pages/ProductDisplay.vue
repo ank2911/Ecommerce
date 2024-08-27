@@ -39,11 +39,9 @@
         </div>
 
         <div v-else>
-          <v-actions>
             <v-btn color="primary" outlined @click="addToCart(product)">
               Add to Cart
             </v-btn>
-          </v-actions>
         </div>
       </v-card-actions>
     </v-card>
@@ -57,14 +55,12 @@
           v-for="review in product.reviews"
           :key="review.reviewerEmail"
         >
-          <v-list-item-content>
             <v-list-item-title style="margin-left: 8px">{{
               review.reviewerName
             }}</v-list-item-title>
             <v-list-item-subtitle style="margin-left: 8px">{{
               review.comment
             }}</v-list-item-subtitle>
-          </v-list-item-content>
           <v-list-item-action>
             <v-rating
               color="warning"
@@ -94,23 +90,18 @@
 
 <script>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { fetchProductById } from "../services/Api";
 import { useCartStore } from "../stores/cartStore"; // Import the cart store
 import { useCurrencyStore } from "../stores/currencyStore";
 import { computed } from "vue";
 export default {
   setup() {
-    const route = useRoute();
     const product = ref(null);
     const cartStore = useCartStore(); // Access the cart store
     const currencyStore = useCurrencyStore();
     const fetchProductDetails = async () => {
-      const productId = route.params.id;
-      const response = await fetch(
-        `https://dummyjson.com/products/${productId}`
-      );
-      const data = await response.json();
-      product.value = data;
+      const response = await fetchProductById();
+      product.value = response;;
     };
 
     const addToCart = (product) => {
