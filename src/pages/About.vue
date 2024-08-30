@@ -1,8 +1,8 @@
 <template>
     <div class="about-container">
     <div class="abt">
-        <h1>About Page</h1>
-        <p>Welcome to our About page!</p>
+        <h1 class="heading">Know about us</h1>
+        
         <section>
             <h2>Our Story</h2>
             <p>Welcome to EzShop! Founded in 1992, we embarked on a mission to deliver high-quality products designed to make a difference in our customers’ lives. What started with a passion for selling oroducts has grown into a trusted name in ecommerce industry, serving customers around the world.</p>
@@ -72,5 +72,10 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+.heading{
+    text-decoration: underline;
+
 }
 </style>
