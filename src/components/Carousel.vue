@@ -3,6 +3,7 @@
       class="custom-carousel"
       show-arrows="hover"
        height="fit-content"
+       cycle
     >
       <v-carousel-item
         v-for="(item, index) in carouselSlide"
