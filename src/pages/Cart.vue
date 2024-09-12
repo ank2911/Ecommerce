@@ -8,17 +8,26 @@
         <div v-if="cart.length > 0">
           <v-row v-for="item in cart" :key="item.id" class="cart-item">
             <v-col cols="12" md="4">
-              <v-img :src="item.thumbnail" alt="Product Image" class="item-image" />
+              <v-img :src="item.images.edges[0].node.url" alt="Product Image" class="item-image" />
             </v-col>
             <v-col cols="12" md="8">
               <div class="item-details">
                 <h3>{{ item.title }}</h3>
-                <p>Price: {{currencyIcon}}{{
-              convertedPrice(
-              item.price,
-              item.discountPercentage
-            )
-          }}</p>
+                
+                 <div v-if="item.variants.edges[0].node.compareAtPriceV2">
+              <p class="price">
+                {{currencyIcon}} {{item.variants.edges[0].node.compareAtPriceV2.amount }}   
+              </p>
+              <p class="actual-price"  >
+              {{currencyIcon}} {{item.variants.edges[0].node.priceV2.amount }}
+            </p>
+            </div>
+            <div v-else> 
+            <p class="actual-price"  >
+              {{currencyIcon}} {{item.variants.edges[0].node.priceV2.amount }}
+            </p>
+          </div>
+  
                 <div class="quantity-controls">
                   <v-btn icon @click="decreaseQty(item)">
                     <v-icon>mdi-minus</v-icon>
@@ -104,6 +113,11 @@ const totalPrice = computed(() => {
 
 .item-details p {
   margin: 5px 0;
+}
+.price {
+  text-decoration: line-through;
+  margin-right: 10px;
+  font-size: 16px;
 }
 
 .quantity-controls {

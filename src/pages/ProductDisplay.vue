@@ -5,13 +5,13 @@
     </v-btn>
     <v-card>
       <v-img
-        :src="product.thumbnail"
+        .src="product.images.edges[0].node.url"
         height="300px"
         alt="Product Image"
       ></v-img>
       <v-card-title>{{ product.title }}</v-card-title>
       <v-card-subtitle>{{ product.description }}</v-card-subtitle>
-      <v-card-text>
+      <!-- <v-card-text>
         <p><strong>Original Price:</strong> {{currencyIcon}}{{ actualPrice(product.price) }}</p>
         <p>
           <strong>Discounted Price:</strong> {{currencyIcon}} {{
@@ -26,27 +26,42 @@
         </p>
         <p><strong>Category:</strong> {{ product.category }}</p>
         <p><strong>Rating:</strong> {{ product.rating }}</p>
-      </v-card-text>
+      </v-card-text> -->
+      <!-- <v-card-text>
+            <div v-if="product.variants.edges[0].node.compareAtPriceV2">
+              <p class="price">
+                {{currencyIcon}} {{product.variants.edges[0].node.compareAtPriceV2.amount }}   
+              </p>
+              <p class="actual-price"  >
+              {{currencyIcon}} {{product.variants.edges[0].node.priceV2.amount }}
+            </p>
+            </div>
+            <div v-else> 
+            <p class="actual-price"  >
+              {{currencyIcon}} {{product.variants.edges[0].node.priceV2.amount }}
+            </p>
+          </div>
+          </v-card-text>  -->
       <v-card-actions>
-        <div v-if="getProductQuantity(product) > 0">
-          <v-btn icon @click="delFromCart(product)">
+        <div v-if="getProductQuantity(product.node) > 0">
+          <v-btn icon @click="delFromCart(product.node)">
             <v-icon>mdi-minus</v-icon>
           </v-btn>
-          <span>&nbsp;{{ getProductQuantity(product) }}</span>
-          <v-btn icon @click="addToCart(product)">
+          <span>&nbsp;{{ getProductQuantity(product.node) }}</span>
+          <v-btn icon @click="addToCart(product.node)">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </div>
 
         <div v-else>
-            <v-btn color="primary" outlined @click="addToCart(product)">
+            <v-btn color="primary" outlined @click="addToCart(product.node)">
               Add to Cart
             </v-btn>
         </div>
       </v-card-actions>
     </v-card>
 
-    <!-- Reviews and Comments -->
+    <!-- Reviews and Comments
     <v-card class="mt-5">
       <v-card-title>User Reviews</v-card-title>
       <v-divider></v-divider>
@@ -84,8 +99,8 @@
           type="card-avatar, actions"
         ></v-skeleton-loader>
       </v-col>
-    </v-row>
-  </v-container>
+    </v-row>-->
+  </v-container> 
 </template>
 
 <script>

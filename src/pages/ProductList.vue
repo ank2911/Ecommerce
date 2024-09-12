@@ -1,7 +1,7 @@
 <template>
   <Carousel />
   <div class="container">
-    <v-row align="center">
+    <!-- <v-row align="center">
       <v-col class="d-flex" cols="12" sm="4">
         <v-select
           v-model="selectedCategory"
@@ -11,12 +11,12 @@
           outlined
         ></v-select>
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <v-row>
       <v-col
         v-for="product in paginatedProducts"
-        :key="product.id"
+        :key="product.node.id"
         cols="12"
         sm="6"
         md="3"
@@ -24,7 +24,7 @@
         <v-card max-width="400" class="card">
           <v-img
             class="product-image"
-            :src="product.thumbnail"
+            :src="product.node.images.edges[0].node.url"
             height="150px"
             alt="Product Image"
             contain
@@ -36,31 +36,35 @@
             mdi-heart
           </v-icon>
 
-          <v-card-title>{{ product.title }}</v-card-title>
-          <v-card-subtitle>{{ product.description }}</v-card-subtitle>
+          <v-card-title>{{ product.node.title }}</v-card-title>
+          <v-card-subtitle>{{ product.node.description }}</v-card-subtitle>
           <v-card-text>
-            <div>
-              <span class="price">{{currencyIcon}} {{ currencyStore.actualPrice(product.price) }}</span>
-              <span class="discount"
-                >{{ product.discountPercentage }}% off</span
-              >
-            </div>
-            <p class="actual-price">
-              {{currencyIcon}} {{ currencyStore.convertPrice(product.price, product.discountPercentage) }}
+            <div v-if="product.node.variants.edges[0].node.compareAtPriceV2">
+              <p class="price">
+                {{currencyIcon}} {{product.node.variants.edges[0].node.compareAtPriceV2.amount }}   
+              </p>
+              <p class="actual-price"  >
+              {{currencyIcon}} {{product.node.variants.edges[0].node.priceV2.amount }}
             </p>
-          </v-card-text>
+            </div>
+            <div v-else> 
+            <p class="actual-price"  >
+              {{currencyIcon}} {{product.node.variants.edges[0].node.priceV2.amount }}
+            </p>
+          </div>
+          </v-card-text> 
 
           <v-card-actions>
-            <div v-if="getProductQuantity(product) > 0">
-              <v-btn icon @click="delFromCart(product)">
+            <div v-if="getProductQuantity(product.node) > 0">
+              <v-btn icon @click="delFromCart(product.node)">
                 <v-icon>mdi-minus</v-icon>
               </v-btn>
-              <span>&nbsp;{{ getProductQuantity(product) }}</span>
-              <v-btn icon @click="addToCart(product)">
+              <span>&nbsp;{{ getProductQuantity(product.node) }}</span>
+              <v-btn icon @click="addToCart(product.node)">
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </div>
-            <v-btn v-else color="primary" outlined @click="addToCart(product)">
+            <v-btn v-else color="primary" outlined @click="addToCart(product.node)">
               Add to Cart
             </v-btn>
             <v-btn color="secondary" :to="`/product/${product.id}`">
@@ -70,14 +74,17 @@
         </v-card>
       </v-col>
     </v-row>
-
     <!-- Pagination -->
+     <v-row justify="center">
+      <v-col cols="5">
     <v-pagination
       v-model="page"
       :length="pageCount"
       rounded
       color="primary"
     ></v-pagination>
+  </v-col>
+  </v-row>
   </div>
 </template>
 
@@ -87,54 +94,56 @@ import { fetchProducts } from "../services/Api";
 import { useCartStore } from "../stores/cartStore";
 import { useWishlistStore } from "../stores/wishlist";
 import { useCurrencyStore } from "../stores/currencyStore";
+import { fetchProducts2}  from "../services/Api";
+
 export default {
   data() {
     return {
       cartStore: useCartStore(),
       wishlistStore: useWishlistStore(),
-      currencyStore: useCurrencyStore(),
+     currencyStore: useCurrencyStore(),
       products: [],
       categories: [],
-      selectedCategory: "",
+       selectedCategory: "",
       page: 1,
       itemsPerPage: 8,
-    };
+     };
   },
   components: {
     Carousel,
   },
   computed: {
-    filteredProducts() {
-      if (this.selectedCategory && this.selectedCategory !== "All") {
-        return this.products.filter(
-          (product) => product.category === this.selectedCategory
-        );
-      }
-      return this.products;
-    },
+    //  filteredProducts() {
+    //    if (this.selectedCategory && this.selectedCategory !== "All") {
+    //      return this.products.filter(
+    //       (product) => product.category === this.selectedCategory
+    //      );
+    //    }
+    //    return this.products;
+    //  },
     paginatedProducts() {
       const start = (this.page - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
-      return this.filteredProducts.slice(start, end);
+      return this.products.slice(start, end);
     },
     pageCount() {
-      return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+      return Math.ceil(this.products.length / this.itemsPerPage);
     },
     currencyIcon() {
     return this.currencyStore.currency === 'USD' ? '$' : '₹';
   },
   },
-  methods: {
-    async fetchProducts() {
-      const response=(await fetchProducts());
-      this.products = response;
-      console.log(this.products);
-      // Fetch categories dynamically
-      this.categories = [
-        "All",
-        ...new Set(this.products.map((product) => product.category)),
-      ];
-    },
+   methods: {
+    // async fetchProducts() {
+    //   const response=(await fetchProducts());
+    //   this.products = response;
+    //   console.log(this.products);
+    //   // Fetch categories dynamically
+    //   this.categories = [
+    //     "All",
+    //     ...new Set(this.products.map((product) => product.category)),
+    //   ];
+    // },
     addToCart(product) {
       const cartStore = useCartStore(); // Access the cart store
       cartStore.addCart(product); // Call the addCart method
@@ -159,15 +168,23 @@ export default {
 
       // product.inWishlist = !product.inWishlist;
     },
+    getData(){
+      fetchProducts2().then((response) => {
+        this.products=response
+        console.log(this.products);
+      });
+    }
   },
   created() {
-    this.fetchProducts();
+ //   this.fetchProducts();
+    this.getData();
+   
   },
-  watch: {
-    selectedCategory() {
-      this.page = 1; // Reset to the first page when changing category
-    },
-  },
+  // watch: {
+  //   selectedCategory() {
+  //     this.page = 1; // Reset to the first page when changing category
+  //   },
+  // },
 };
 </script>
 
