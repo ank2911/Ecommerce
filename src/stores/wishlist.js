@@ -13,7 +13,7 @@ export const useWishlistStore = defineStore("wishlist", {
       }
     },
     removeWishlist(product) {
-      this.wishlist = this.wishlist.filter((p) => p.id !== product.id);
+      this.wishlist = this.wishlist.filter((item) => item.id !== product.id);
     },
   },
   getters: {

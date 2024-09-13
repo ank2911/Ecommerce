@@ -15,8 +15,8 @@
 
     <v-row>
       <v-col
-        v-for="product in paginatedProducts"
-        :key="product.id"
+        v-for="product in products"
+        :key="product.node.id"
         cols="12"
         sm="6"
         md="3"
@@ -24,30 +24,40 @@
         <v-card max-width="400" class="card">
           <v-img
             class="product-image"
-            :src="product.thumbnail"
+            :src="product.node.images.edges[0].node.url"
             height="150px"
             alt="Product Image"
             contain
           ></v-img>
           <v-icon
             class="heart"
-            :class="{ wishlist: true, 'wishlist-active': product.inWishlist}"
-            @click="addToWishlist(product)">
+            :class="{ wishlist: true, 'wishlist-active': product.inWishlist }"
+            @click="addToWishlist(product)"
+          >
             mdi-heart
           </v-icon>
 
-          <v-card-title>{{ product.title }}</v-card-title>
-          <v-card-subtitle>{{ product.description }}</v-card-subtitle>
+          <v-card-title>{{ product.node.title }}</v-card-title>
+          <v-card-subtitle>{{ product.node.description }}</v-card-subtitle>
           <v-card-text>
             <div>
-              <span class="price">{{currencyIcon}} {{ currencyStore.actualPrice(product.price) }}</span>
-              <span class="discount"
-                >{{ product.discountPercentage }}% off</span
+              <span
+                >{{ currencyIcon }}
+                ₹ {{ currencyStore.actualPrice(product.node.variants.edges[0].node.priceV2.amount) }}</span
               >
+              <!-- <span class="discount"
+                >{{ product.discountPercentage }}% off</span
+              > -->
             </div>
-            <p class="actual-price">
-              {{currencyIcon}} {{ currencyStore.convertPrice(product.price, product.discountPercentage) }}
-            </p>
+            <!-- <p class="actual-price">
+              {{ currencyIcon }}
+              {{
+                currencyStore.convertPrice(
+                  product.price,
+                  product.discountPercentage
+                )
+              }}
+            </p> -->
           </v-card-text>
 
           <v-card-actions>
@@ -60,17 +70,16 @@
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </div>
-            <v-btn v-else color="primary" outlined @click="addToCart(product)">
+            <v-btn v-else color="primary" outlined @click="addToCart(product.node)">
               Add to Cart
             </v-btn>
-            <v-btn color="secondary" :to="`/product/${product.id}`">
+            <v-btn color="secondary" :to="`/product/${product.node.id}`">
               View Details
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
-
     <!-- Pagination -->
     <v-pagination
       v-model="page"
@@ -82,17 +91,20 @@
 </template>
 
 <script>
+import axios from "axios";
 import Carousel from "../components/Carousel.vue";
-import { fetchProducts } from "../services/Api";
 import { useCartStore } from "../stores/cartStore";
 import { useWishlistStore } from "../stores/wishlist";
 import { useCurrencyStore } from "../stores/currencyStore";
+import { useProductStore } from "../stores/productStore";
+import { fetchProducts } from "../services/Api";
 export default {
   data() {
     return {
       cartStore: useCartStore(),
       wishlistStore: useWishlistStore(),
       currencyStore: useCurrencyStore(),
+      productStore: useProductStore(),
       products: [],
       categories: [],
       selectedCategory: "",
@@ -103,37 +115,41 @@ export default {
   components: {
     Carousel,
   },
-  computed: {
-    filteredProducts() {
-      if (this.selectedCategory && this.selectedCategory !== "All") {
-        return this.products.filter(
-          (product) => product.category === this.selectedCategory
-        );
-      }
-      return this.products;
-    },
-    paginatedProducts() {
-      const start = (this.page - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.filteredProducts.slice(start, end);
-    },
-    pageCount() {
-      return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
-    },
-    currencyIcon() {
-    return this.currencyStore.currency === 'USD' ? '$' : '₹';
-  },
-  },
+  // computed: {
+  //   filteredProducts() {
+  //     if (this.selectedCategory && this.selectedCategory !== "All") {
+  //       return this.products.filter(
+  //         (product) => product.category === this.selectedCategory
+  //       );
+  //     }
+  //     return this.products;
+  //   },
+  //   paginatedProducts() {
+  //     const start = (this.page - 1) * this.itemsPerPage;
+  //     const end = start + this.itemsPerPage;
+  //     return this.filteredProducts.slice(start, end);
+  //   },
+  //   pageCount() {
+  //     return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+  //   },
+  //   currencyIcon() {
+  //     return this.currencyStore.currency === "USD" ? "$" : "₹";
+  //   },
+  // },
   methods: {
-    async fetchProducts() {
-      const response=(await fetchProducts());
-      this.products = response;
-      console.log(this.products);
-      // Fetch categories dynamically
-      this.categories = [
-        "All",
-        ...new Set(this.products.map((product) => product.category)),
-      ];
+    // async fetchProducts() {
+    //   const response = await fetchProducts();
+    //   this.products = response;
+    //   console.log(this.products);
+    //   // Fetch categories dynamically
+    //   this.categories = [
+    //     "All",
+    //     ...new Set(this.products.map((product) => product.category)),
+    //   ];
+    // },
+    async fetchProducts(){
+         const response = await this.productStore.fetchProducts();
+          this.products = response;
     },
     addToCart(product) {
       const cartStore = useCartStore(); // Access the cart store
@@ -159,8 +175,10 @@ export default {
 
       // product.inWishlist = !product.inWishlist;
     },
+
+    
   },
-  created() {
+ created() {
     this.fetchProducts();
   },
   watch: {

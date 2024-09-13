@@ -12,9 +12,9 @@ export const useCartStore = defineStore('cart', () => {
       cart.value = cart.value.map((item) =>
         item.id === product.id ? { ...item, qty: item.qty + 1 } : item
       );
-    } else {
+      return;
+    } 
       cart.value = [...cart.value, { ...product, qty: 1 }];
-    }
   };
 
   const delCart = (product) => {

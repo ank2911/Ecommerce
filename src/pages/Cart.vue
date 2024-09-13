@@ -50,13 +50,10 @@ import { useCartStore } from '../stores/cartStore';
 import { useCurrencyStore } from '../stores/currencyStore';
 import { computed } from 'vue';
 
-// Use the cart store
 const cartStore = useCartStore();
 const currencyStore = useCurrencyStore();
-// Computed property for cart items
 const cart = computed(() => cartStore.cart);
 
-// Methods for manipulating cart items
 const increaseQty = (item) => {
   cartStore.addCart(item);
 };
@@ -70,7 +67,7 @@ const convertedPrice = (price, discount) => {
   const currencyIcon =computed(() => {
     return currencyStore.currency === 'USD' ? '$' : '₹';
   });
-// Computed property for total price
+
 const totalPrice = computed(() => {
   return cart.value.reduce((total, item) => {
     const itemPrice = currencyStore.convertPrice(item.price, item.discountPercentage);

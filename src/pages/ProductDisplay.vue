@@ -99,9 +99,10 @@ export default {
     const product = ref(null);
     const cartStore = useCartStore(); // Access the cart store
     const currencyStore = useCurrencyStore();
+
     const fetchProductDetails = async () => {
       const response = await fetchProductById();
-      product.value = response;;
+      product.value = response;
     };
 
     const addToCart = (product) => {
