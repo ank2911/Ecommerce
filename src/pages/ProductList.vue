@@ -39,10 +39,11 @@
           <v-card-title>{{ product.node.title }}</v-card-title>
           <v-card-subtitle>{{ product.node.description }}</v-card-subtitle>
           <v-card-text>
-            <div v-if="product.node.variants.edges[0].node.compareAtPriceV2">
-              <p class="price">
+            <div v-if="product.node.variants.edges[0].node.compareAtPriceV2" >
+              <p class="price" >
                 {{currencyIcon}} {{product.node.variants.edges[0].node.compareAtPriceV2.amount }}   
               </p>
+              
               <p class="actual-price"  >
               {{currencyIcon}} {{product.node.variants.edges[0].node.priceV2.amount }}
             </p>
@@ -67,7 +68,7 @@
             <v-btn v-else color="primary" outlined @click="addToCart(product.node)">
               Add to Cart
             </v-btn>
-            <v-btn color="secondary" :to="`/product/${product.id}`">
+            <v-btn color="secondary" @click="Details(product)">
               View Details
             </v-btn>
           </v-card-actions>
@@ -95,7 +96,7 @@ import { useCartStore } from "../stores/cartStore";
 import { useWishlistStore } from "../stores/wishlist";
 import { useCurrencyStore } from "../stores/currencyStore";
 import { fetchProducts2}  from "../services/Api";
-
+import router from '../router/router'
 export default {
   data() {
     return {
@@ -134,6 +135,9 @@ export default {
   },
   },
    methods: {
+    Details(product){
+      router.push({ name: "ProductDisplay",params: { id: product.node.id } });
+    },
     // async fetchProducts() {
     //   const response=(await fetchProducts());
     //   this.products = response;
@@ -171,7 +175,6 @@ export default {
     getData(){
       fetchProducts2().then((response) => {
         this.products=response
-        console.log(this.products);
       });
     }
   },

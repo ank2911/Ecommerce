@@ -4,13 +4,9 @@
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <v-card>
-      <v-img
-        .src="product.images.edges[0].node.url"
-        height="300px"
-        alt="Product Image"
-      ></v-img>
-      <v-card-title>{{ product.title }}</v-card-title>
-      <v-card-subtitle>{{ product.description }}</v-card-subtitle>
+      <v-img :src="product[0].node.images.edges[0].node.url"></v-img>
+      <v-card-title>{{ product[0].node.title }}</v-card-title>
+      <v-card-subtitle>{{ product[0].node.description }}</v-card-subtitle>
       <!-- <v-card-text>
         <p><strong>Original Price:</strong> {{currencyIcon}}{{ actualPrice(product.price) }}</p>
         <p>
@@ -27,28 +23,28 @@
         <p><strong>Category:</strong> {{ product.category }}</p>
         <p><strong>Rating:</strong> {{ product.rating }}</p>
       </v-card-text> -->
-      <!-- <v-card-text>
-            <div v-if="product.variants.edges[0].node.compareAtPriceV2">
-              <p class="price">
-                {{currencyIcon}} {{product.variants.edges[0].node.compareAtPriceV2.amount }}   
+        <v-card-text>
+              <div v-if="product[0].node.variants.edges[0].node.compareAtPriceV2">
+                <p class="price">
+                  {{currencyIcon}} {{product[0].node.variants.edges[0].node.compareAtPriceV2.amount }}   
+                </p>
+                <p class="actual-price"  >
+                {{currencyIcon}} {{product[0].node.variants.edges[0].node.priceV2.amount }}
               </p>
+              </div>
+              <div v-else> 
               <p class="actual-price"  >
-              {{currencyIcon}} {{product.variants.edges[0].node.priceV2.amount }}
-            </p>
+                {{currencyIcon}} {{product[0].node.variants.edges[0].node.priceV2.amount }}
+              </p>
             </div>
-            <div v-else> 
-            <p class="actual-price"  >
-              {{currencyIcon}} {{product.variants.edges[0].node.priceV2.amount }}
-            </p>
-          </div>
-          </v-card-text>  -->
+            </v-card-text> 
       <v-card-actions>
-        <div v-if="getProductQuantity(product.node) > 0">
-          <v-btn icon @click="delFromCart(product.node)">
+        <div v-if="getProductQuantity(product[0].node) > 0">
+          <v-btn icon @click="delFromCart(product[0].node)">
             <v-icon>mdi-minus</v-icon>
           </v-btn>
-          <span>&nbsp;{{ getProductQuantity(product.node) }}</span>
-          <v-btn icon @click="addToCart(product.node)">
+          <span>&nbsp;{{ getProductQuantity(product[0].node) }}</span>
+          <v-btn icon @click="addToCart(product[0].node)">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </div>
@@ -105,7 +101,7 @@
 
 <script>
 import { ref, onMounted } from "vue";
-import { fetchProductById } from "../services/Api";
+import { fetchProductById2 } from "../services/Api";
 import { useCartStore } from "../stores/cartStore"; // Import the cart store
 import { useCurrencyStore } from "../stores/currencyStore";
 import { computed } from "vue";
@@ -115,8 +111,10 @@ export default {
     const cartStore = useCartStore(); // Access the cart store
     const currencyStore = useCurrencyStore();
     const fetchProductDetails = async () => {
-      const response = await fetchProductById();
-      product.value = response;;
+      const response = await fetchProductById2();
+      product.value = response;
+      console.log(product.value[0]);
+     
     };
 
     const addToCart = (product) => {
@@ -161,6 +159,11 @@ export default {
 .v-container {
   margin-top: 50px;
 }
+.price {
+  text-decoration: line-through;
+  margin-right: 10px;
+  font-size: 16px;
+}
 .go-back-btn {
   background-color: #8c94c4;
   font-size: 15px;
@@ -172,4 +175,5 @@ export default {
 .currency-icon {
   font-size: 18px;
 }
+
 </style>
