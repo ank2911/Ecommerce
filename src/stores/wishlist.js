@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
-
+ 
 export const useWishlistStore = defineStore("wishlist", {
   state: () => ({
     wishlist: reactive([]),
@@ -13,7 +13,7 @@ export const useWishlistStore = defineStore("wishlist", {
       }
     },
     removeWishlist(product) {
-      this.wishlist = this.wishlist.filter((item) => item.id !== product.id);
+      this.wishlist = this.wishlist.filter((p) => p.id !== product.id);
     },
   },
   getters: {

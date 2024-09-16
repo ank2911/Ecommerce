@@ -15,7 +15,7 @@
           <v-row v-for="item in wishlistItems" :key="item.id" class="cart-item">
             <v-col cols="12" md="4">
               <v-img
-                :src="item.thumbnail"
+                :src="item.images.edges[0].node.url"
                 alt="Product Image"
                 class="item-image"
               />
@@ -24,16 +24,16 @@
               <div class="item-details">
                 <h2>{{ item.title }}</h2>
                 <h4>
-                  Price:{{currencyIcon}}{{
-              convertedPrice(
-              item.price,
-              item.discountPercentage
+                  Price:₹{{
+              (
+              item.variants.edges[0].node.priceV2.amount
+              // item.discountPercentage
             )
           }}
                 </h4>
                 <p>{{ item.description }}</p>
               </div>
-
+ 
               <v-btn
                 class="add"
                 color="primary"
@@ -41,7 +41,7 @@
                 @click="addToCart(item)"
                 >Add to cart</v-btn
               >
-
+ 
               <v-btn
                 class="remove"
                 color="red"
@@ -55,7 +55,7 @@
     </v-card>
   </v-container>
 </template>
-
+ 
 <script>
 import { useWishlistStore } from "../stores/wishlist";
 import { computed } from "vue";
@@ -68,11 +68,13 @@ export default {
     const wishlistStore = useWishlistStore();
     const wishlistItems = computed(() => wishlistStore.getWishlist);
 
+    
+ 
     const addToCart = (item) => {
       // console.log("Adding to cart:", item);
       cartStore.addCart(item);
     };
-
+ 
     const removeFromWishlist = (item) => {
       wishlistStore.removeWishlist(item);
     };
@@ -92,7 +94,7 @@ export default {
   },
 };
 </script>
-
+ 
 <style scoped>
 .cart-item {
   display: flex;
@@ -100,33 +102,33 @@ export default {
   border-bottom: 1px solid #ddd;
   padding: 10px 0;
 }
-
+ 
 .item-image {
   width: 100px;
   height: 100px;
   object-fit: cover;
   margin-right: 15px;
 }
-
+ 
 .item-details {
   flex: 1;
 }
-
+ 
 .item-details h3 {
   margin: 0 0 10px;
 }
-
+ 
 .item-details p {
   margin: 5px 0;
 }
-
+ 
 .quantity-controls {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-top: 10px;
 }
-
+ 
 .quantity-controls button {
   background-color: #007bff;
   color: white;
@@ -136,29 +138,29 @@ export default {
   cursor: pointer;
   border-radius: 3px;
 }
-
+ 
 .quantity-controls button:hover {
   background-color: #0056b3;
 }
-
+ 
 .empty-wishlist {
   text-align: center;
   font-size: 18px;
   color: #666;
 }
-
+ 
 .card-footer {
   background-color: #f8f9fa;
   padding: 15px;
   text-align: right;
 }
-
+ 
 .total-price {
   margin-left: 50px;
   font-size: 18px;
   font-weight: bold;
 }
-
+ 
 .v-btn {
   width: 30px;
   height: 30px;
@@ -170,24 +172,24 @@ export default {
 .v-card-title {
   text-align: center;
 }
-
+ 
 .go-back-btn {
   background-color: #8c94c4;
   font-size: 15px;
   margin-bottom: 10px;
 }
-
+ 
 .remove {
   width: 80px;
   padding: 5px;
 }
-
+ 
 .add {
   width: 120px;
   padding: 5px;
   margin-right: 10px;
 }
-
+ 
 .empty-cart {
   text-align: center;
   font-size: 18px;
@@ -197,7 +199,3 @@ export default {
   font-size: 18px;
 }
 </style>
-
-
-
-

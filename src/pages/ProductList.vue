@@ -31,8 +31,8 @@
           ></v-img>
           <v-icon
             class="heart"
-            :class="{ wishlist: true, 'wishlist-active': product.inWishlist }"
-            @click="addToWishlist(product)"
+            :class="{ wishlist: true, 'wishlist-active': product.node.inWishlist }"
+            @click="addToWishlist(product.node)"
           >
             mdi-heart
           </v-icon>
