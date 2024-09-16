@@ -1,7 +1,7 @@
 <template>
   <Carousel />
   <div class="container">
-    <v-row align="center">
+    <!-- <v-row align="center">
       <v-col class="d-flex" cols="12" sm="4">
         <v-select
           v-model="selectedCategory"
@@ -11,11 +11,11 @@
           outlined
         ></v-select>
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <v-row>
       <v-col
-        v-for="product in products"
+        v-for="product in paginatedProducts"
         :key="product.node.id"
         cols="12"
         sm="6"
@@ -40,40 +40,36 @@
           <v-card-title>{{ product.node.title }}</v-card-title>
           <v-card-subtitle>{{ product.node.description }}</v-card-subtitle>
           <v-card-text>
-            <div>
-              <span
-                >{{ currencyIcon }}
-                ₹ {{ currencyStore.actualPrice(product.node.variants.edges[0].node.priceV2.amount) }}</span
-              >
-              <!-- <span class="discount"
-                >{{ product.discountPercentage }}% off</span
-              > -->
-            </div>
-            <!-- <p class="actual-price">
-              {{ currencyIcon }}
-              {{
-                currencyStore.convertPrice(
-                  product.price,
-                  product.discountPercentage
-                )
-              }}
-            </p> -->
-          </v-card-text>
+            <!-- <div v-if="product.node.variants.edges[0].node.compareAtPriceV2" >
+              <p class="price" >
+                {{currencyIcon}} {{product.node.variants.edges[0].node.compareAtPriceV2.amount }}   
+              </p>
+              
+              <p class="actual-price"  >
+              {{currencyIcon}} {{product.node.variants.edges[0].node.priceV2.amount }}
+            </p>
+            </div> -->
+            <div > 
+            <p class="actual-price"  >
+              {{currencyIcon}} {{product.node.variants.edges[0].node.priceV2.amount }}
+            </p>
+          </div>
+          </v-card-text> 
 
           <v-card-actions>
-            <div v-if="getProductQuantity(product) > 0">
-              <v-btn icon @click="delFromCart(product)">
+            <div v-if="getProductQuantity(product.node) > 0">
+              <v-btn icon @click="delFromCart(product.node)">
                 <v-icon>mdi-minus</v-icon>
               </v-btn>
-              <span>&nbsp;{{ getProductQuantity(product) }}</span>
-              <v-btn icon @click="addToCart(product)">
+              <span>&nbsp;{{ getProductQuantity(product.node) }}</span>
+              <v-btn icon @click="addToCart(product.node)">
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </div>
             <v-btn v-else color="primary" outlined @click="addToCart(product.node)">
               Add to Cart
             </v-btn>
-            <v-btn color="secondary" :to="`/product/${product.node.id}`">
+            <v-btn color="secondary" @click="Details(product)">
               View Details
             </v-btn>
           </v-card-actions>
@@ -81,12 +77,16 @@
       </v-col>
     </v-row>
     <!-- Pagination -->
+     <v-row justify="center">
+      <v-col cols="5">
     <v-pagination
       v-model="page"
       :length="pageCount"
       rounded
       color="primary"
     ></v-pagination>
+  </v-col>
+  </v-row>
   </div>
 </template>
 
@@ -96,49 +96,51 @@ import Carousel from "../components/Carousel.vue";
 import { useCartStore } from "../stores/cartStore";
 import { useWishlistStore } from "../stores/wishlist";
 import { useCurrencyStore } from "../stores/currencyStore";
-import { useProductStore } from "../stores/productStore";
-import { fetchProducts } from "../services/Api";
+import { fetchProducts2}  from "../services/Api";
+import router from '../router/router'
 export default {
   data() {
     return {
       cartStore: useCartStore(),
       wishlistStore: useWishlistStore(),
-      currencyStore: useCurrencyStore(),
-      productStore: useProductStore(),
+     currencyStore: useCurrencyStore(),
       products: [],
       categories: [],
-      selectedCategory: "",
+       selectedCategory: "",
       page: 1,
       itemsPerPage: 8,
-    };
+     };
   },
   components: {
     Carousel,
   },
-  // computed: {
-  //   filteredProducts() {
-  //     if (this.selectedCategory && this.selectedCategory !== "All") {
-  //       return this.products.filter(
-  //         (product) => product.category === this.selectedCategory
-  //       );
-  //     }
-  //     return this.products;
-  //   },
-  //   paginatedProducts() {
-  //     const start = (this.page - 1) * this.itemsPerPage;
-  //     const end = start + this.itemsPerPage;
-  //     return this.filteredProducts.slice(start, end);
-  //   },
-  //   pageCount() {
-  //     return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
-  //   },
-  //   currencyIcon() {
-  //     return this.currencyStore.currency === "USD" ? "$" : "₹";
-  //   },
-  // },
-  methods: {
+  computed: {
+    //  filteredProducts() {
+    //    if (this.selectedCategory && this.selectedCategory !== "All") {
+    //      return this.products.filter(
+    //       (product) => product.category === this.selectedCategory
+    //      );
+    //    }
+    //    return this.products;
+    //  },
+    paginatedProducts() {
+      const start = (this.page - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.products.slice(start, end);
+    },
+    pageCount() {
+      return Math.ceil(this.products.length / this.itemsPerPage);
+    },
+    currencyIcon() {
+    return this.currencyStore.currency === 'USD' ? '$' : '₹';
+  },
+  },
+   methods: {
+    Details(product){
+      router.push({ name: "ProductDisplay",params: { id: product.node.id } });
+    },
     // async fetchProducts() {
-    //   const response = await fetchProducts();
+    //   const response=(await fetchProducts());
     //   this.products = response;
     //   console.log(this.products);
     //   // Fetch categories dynamically
@@ -147,10 +149,6 @@ export default {
     //     ...new Set(this.products.map((product) => product.category)),
     //   ];
     // },
-    async fetchProducts(){
-         const response = await this.productStore.fetchProducts();
-          this.products = response;
-    },
     addToCart(product) {
       const cartStore = useCartStore(); // Access the cart store
       cartStore.addCart(product); // Call the addCart method
@@ -175,17 +173,22 @@ export default {
 
       // product.inWishlist = !product.inWishlist;
     },
-
-    
+    getData(){
+      fetchProducts2().then((response) => {
+        this.products=response
+      });
+    }
   },
- created() {
-    this.fetchProducts();
+  created() {
+ //   this.fetchProducts();
+    this.getData();
+   
   },
-  watch: {
-    selectedCategory() {
-      this.page = 1; // Reset to the first page when changing category
-    },
-  },
+  // watch: {
+  //   selectedCategory() {
+  //     this.page = 1; // Reset to the first page when changing category
+  //   },
+  // },
 };
 </script>
 

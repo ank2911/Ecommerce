@@ -4,14 +4,10 @@
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <v-card>
-      <v-img
-        :src="product.thumbnail"
-        height="300px"
-        alt="Product Image"
-      ></v-img>
-      <v-card-title>{{ product.title }}</v-card-title>
-      <v-card-subtitle>{{ product.description }}</v-card-subtitle>
-      <v-card-text>
+      <v-img :src="product[0].node.images.edges[0].node.url"></v-img>
+      <v-card-title>{{ product[0].node.title }}</v-card-title>
+      <v-card-subtitle>{{ product[0].node.description }}</v-card-subtitle>
+      <!-- <v-card-text>
         <p><strong>Original Price:</strong> {{currencyIcon}}{{ actualPrice(product.price) }}</p>
         <p>
           <strong>Discounted Price:</strong> {{currencyIcon}} {{
@@ -26,27 +22,43 @@
         </p>
         <p><strong>Category:</strong> {{ product.category }}</p>
         <p><strong>Rating:</strong> {{ product.rating }}</p>
-      </v-card-text>
+      </v-card-text> -->
+        <v-card-text>
+              <div v-if="product[0].node.variants.edges[0].node.compareAtPriceV2">
+                <p class="price">
+                  {{currencyIcon}} {{product[0].node.variants.edges[0].node.compareAtPriceV2.amount }}   
+                </p>
+                <p class="actual-price"  >
+                {{currencyIcon}} {{product[0].node.variants.edges[0].node.priceV2.amount }}
+              </p>
+              </div>
+              <div v-else> 
+              <p class="actual-price"  >
+                {{currencyIcon}} {{product[0].node.variants.edges[0].node.priceV2.amount }}
+              </p>
+            </div>
+            </v-card-text> 
       <v-card-actions>
-        <div v-if="getProductQuantity(product) > 0">
-          <v-btn icon @click="delFromCart(product)">
+        <div v-if="getProductQuantity(product[0].node) > 0">
+          <v-btn icon @click="delFromCart(product[0].node)">
             <v-icon>mdi-minus</v-icon>
           </v-btn>
-          <span>&nbsp;{{ getProductQuantity(product) }}</span>
-          <v-btn icon @click="addToCart(product)">
+          <span>&nbsp;{{ getProductQuantity(product[0].node) }}</span>
+          <v-btn icon @click="addToCart(product[0].node)">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </div>
 
         <div v-else>
-            <v-btn color="primary" outlined @click="addToCart(product)">
+            <v-btn color="primary" outlined @click="addToCart(product.node)">
               Add to Cart
             </v-btn>
         </div>
       </v-card-actions>
+      <v-btn @click="addToCompare(product)">Compare</v-btn>
     </v-card>
-
-    <!-- Reviews and Comments -->
+    <ComparisonTable :comparisonTable="comparisonTable" />
+    <!-- Reviews and Comments
     <v-card class="mt-5">
       <v-card-title>User Reviews</v-card-title>
       <v-divider></v-divider>
@@ -84,24 +96,28 @@
           type="card-avatar, actions"
         ></v-skeleton-loader>
       </v-col>
-    </v-row>
-  </v-container>
+    </v-row>-->
+  </v-container> 
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
-import { fetchProductById } from "../services/Api";
+import { fetchProductById2 } from "../services/Api";
 import { useCartStore } from "../stores/cartStore"; // Import the cart store
 import { useCurrencyStore } from "../stores/currencyStore";
 import { computed } from "vue";
+import ComparisonTable from "../components/ComparisonTable.vue";
 export default {
+  components: {
+      ComparisonTable
+    },
   setup() {
     const product = ref(null);
     const cartStore = useCartStore(); // Access the cart store
     const currencyStore = useCurrencyStore();
-
+    const comparisonTable = ref([]);
     const fetchProductDetails = async () => {
-      const response = await fetchProductById();
+      const response = await fetchProductById2();
       product.value = response;
     };
 
@@ -124,10 +140,15 @@ export default {
   function actualPrice(price){
     return currencyStore.actualPrice(price);
   }
+  function addToCompare(product) {
+    comparisonTable.value =product;
+    };
   const currencyIcon =computed(() => {
     return currencyStore.currency === 'USD' ? '$' : '₹';
   });
+ 
     onMounted(fetchProductDetails);
+
 
     return {
       product,
@@ -138,6 +159,8 @@ export default {
       actualPrice,
       currencyIcon,
       cartStore,
+      addToCompare,
+      comparisonTable,
     };
   },
 };
@@ -146,6 +169,11 @@ export default {
 <style scoped>
 .v-container {
   margin-top: 50px;
+}
+.price {
+  text-decoration: line-through;
+  margin-right: 10px;
+  font-size: 16px;
 }
 .go-back-btn {
   background-color: #8c94c4;
@@ -158,4 +186,5 @@ export default {
 .currency-icon {
   font-size: 18px;
 }
+
 </style>
